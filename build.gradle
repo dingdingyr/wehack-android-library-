@@ -5,7 +5,7 @@ android {
     buildToolsVersion "19.1.0"
 
     defaultConfig {
-        applicationId "cn.wehax.internal-libraries"
+        applicationId "cn.wehax.internal_libraries"
         minSdkVersion 9
         targetSdkVersion 18
         versionCode 1
