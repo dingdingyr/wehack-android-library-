@@ -5,7 +5,6 @@ android {
     buildToolsVersion "19.1.0"
 
     defaultConfig {
-        applicationId "cn.wehax.internal_libraries"
         minSdkVersion 9
         targetSdkVersion 18
         versionCode 1
@@ -27,6 +26,9 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-v4:19.1.0'
+    provided 'org.roboguice:roboblender:3.+'
+    compile 'org.roboguice:roboguice:3.+'
+
 
 //    compile 'com.android.support:appcompat-v7:21.0.0'
 }
