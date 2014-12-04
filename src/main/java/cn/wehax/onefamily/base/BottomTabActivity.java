@@ -13,10 +13,8 @@ import cn.wehax.library.R;
 
 import static cn.wehax.library.Assertion.assertThat;
 
-public abstract class BottomTabActivity extends BaseActivity implements IBottomTabView, View.OnClickListener{
+public abstract class BottomTabActivity extends BaseActivity implements IBottomTabView, View.OnClickListener {
 
-//    @Inject
-//    MainPresenter mMainPresenter;
 
     ViewStub bottomRadioGroup;
 
@@ -25,10 +23,9 @@ public abstract class BottomTabActivity extends BaseActivity implements IBottomT
 
     int totalFragmentCount = 0;
 
-    int currentFragmentIndex = 0;
+    int currentFragmentIndex = -1;
 
     private FragmentManager fragmentManager;
-
 
 
     @Override
@@ -36,8 +33,7 @@ public abstract class BottomTabActivity extends BaseActivity implements IBottomT
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bottomRadioGroup = (ViewStub)findViewById(R.id.main_bottom_tab_container);
-
+        bottomRadioGroup = (ViewStub) findViewById(R.id.main_bottom_tab_container);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -46,11 +42,6 @@ public abstract class BottomTabActivity extends BaseActivity implements IBottomT
         setupPresenter();
 
         initFragmentsAndTabs();
-
-//        mMainPresenter.setView(this);
-//
-//        mMainPresenter.initTabs();
-//        mMainPresenter.initContentViews();
 
 
     }
