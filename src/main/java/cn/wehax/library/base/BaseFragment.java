@@ -1,4 +1,4 @@
-package cn.wehax.onefamily.base;
+package cn.wehax.library.base;
 
 import roboguice.fragment.RoboFragment;
 
