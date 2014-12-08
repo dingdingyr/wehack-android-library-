@@ -34,21 +34,17 @@ public interface ITabView {
      */
     public void addCenterFragment(BaseFragment fragment);
 
-    /**
-     * 加载tab布局
-     */
-    public void setupTabLayout(int resLayoutId, final OnTabInflateComplete callback);
+    public void setupTabLayout(int restId,OnViewStubCallBack callBack);
 
     /**
      * 根据索引获取Fragment
      */
     public BaseFragment getCenterFragmentAtIndex(int index);
 
-    /**
-     * tab布局加载完后回调
-     */
-    public interface OnTabInflateComplete {
-        public void setupClickListener(View inflatedView, View.OnClickListener listener);
-        public void setupCheckChangeListener(View inflatedView,CompoundButton.OnCheckedChangeListener listener);
+
+    public interface OnViewStubCallBack{
+        void onClickListener(View view,View.OnClickListener listener);
+        void onCheckChangeListener(View view,CompoundButton.OnCheckedChangeListener listener);
     }
+
 }
