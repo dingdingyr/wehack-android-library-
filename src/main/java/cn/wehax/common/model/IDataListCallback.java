@@ -1,4 +1,4 @@
-package cn.wehax.library.common.model;
+package cn.wehax.common.model;
 
 import java.util.List;
 

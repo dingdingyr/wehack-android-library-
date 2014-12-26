@@ -1,4 +1,4 @@
-package cn.wehax.library.common.model;
+package cn.wehax.common.model;
 
 /**
  * Created by mayuhan on 14/12/17.
