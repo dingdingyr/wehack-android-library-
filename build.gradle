@@ -27,6 +27,8 @@ dependencies {
     compile 'com.android.support:support-v4:19.1.0'
     provided 'org.roboguice:roboblender:3.0.1'
     compile 'org.roboguice:roboguice:3.0.1'
+    compile 'com.mcxiaoke.volley:library:1.0.8'
+
 
 
 //    compile 'com.android.support:appcompat-v7:21.0.0'
