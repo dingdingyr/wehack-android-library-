@@ -3,7 +3,7 @@ package cn.wehax.common.container;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import cn.wehax.library.R;
+import cn.wehax.common.R;
 import roboguice.activity.RoboFragmentActivity;
 
 /**

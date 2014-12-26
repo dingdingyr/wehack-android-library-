@@ -8,9 +8,9 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import cn.wehax.common.view.impl.SkeletonBaseActivity;
-import cn.wehax.library.R;
-import cn.wehax.library.utils.DensityUtil;
+import cn.wehax.common.framework.view.impl.SkeletonBaseActivity;
+import cn.wehax.common.R;
+import cn.wehax.util.DensityUtil;
 
 /**
  * Created by mayuhan on 14/12/11.

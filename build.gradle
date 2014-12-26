@@ -1,5 +1,9 @@
 apply plugin: 'com.android.library'
 
+
+project.tasks.withType(JavaCompile) { task ->
+    options.compilerArgs << "-AguiceAnnotationDatabasePackageName=cn.wehax.common"
+}
 android {
     compileSdkVersion 18
     buildToolsVersion "19.1.0"
@@ -21,6 +25,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
 }
 
 dependencies {
