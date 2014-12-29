@@ -30,9 +30,9 @@ public class DefaultDataListCallback<BB extends IBaseBean> implements IDataListC
         }
 
         mPresenter.mData.addAll(dataList);
-        if(mPresenter.isFirstDataLoad) {
+        if(!mPresenter.isFirstDataLoad) {
             mPresenter.afterFirstDataLoaded(dataList);
-            mPresenter.isFirstDataLoad = false;
+            mPresenter.isFirstDataLoad = true;
         }else{
             mPresenter.afterLaterDataLoaded(dataList);
         }

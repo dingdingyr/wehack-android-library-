@@ -21,9 +21,9 @@ public class DefaultDataCallback<BB extends IBaseBean> implements IDataCallback<
     @Override
     public void onDataReturn(BB data) {
         mPresenter.mData = data;
-        if(mPresenter.isFirstDataLoad) {
+        if(!mPresenter.isFirstDataLoad) {
             mPresenter.afterFirstDataLoaded(data);
-            mPresenter.isFirstDataLoad = false;
+            mPresenter.isFirstDataLoad = true;
         }else{
             mPresenter.afterLaterDataLoaded(data);
         }

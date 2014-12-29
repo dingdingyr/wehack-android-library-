@@ -28,7 +28,7 @@ public abstract class SkeletonNoLoginListPresenter<VI extends IListView, BB exte
 
     protected int currentPage = 1;
     protected int totalPage = -1;
-    protected boolean isFirstDataLoad = true;
+    protected boolean isFirstDataLoad;
 
     public SkeletonNoLoginListPresenter(Class<RD> clazz) {
         this.renderClazz = clazz;
