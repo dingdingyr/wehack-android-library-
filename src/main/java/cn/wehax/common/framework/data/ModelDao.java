@@ -1,6 +1,8 @@
 package cn.wehax.common.framework.data;
 
 import android.app.Application;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -15,6 +17,7 @@ import org.json.JSONObject;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +25,10 @@ import cn.wehax.common.framework.data.annotations.Id;
 import cn.wehax.common.framework.data.annotations.ObjectFrom;
 import cn.wehax.common.framework.data.annotations.RemoteQuery;
 import cn.wehax.common.framework.data.annotations.ValueFrom;
+import cn.wehax.common.framework.model.ErrorBean;
 import cn.wehax.common.framework.model.IBaseBean;
+import cn.wehax.common.framework.model.IDataCallback;
+import cn.wehax.common.framework.model.IDataListCallback;
 import cn.wehax.util.TextUtils;
 
 /**
@@ -44,11 +50,53 @@ public class ModelDao {
     }
 
 
-    public <T extends IBaseBean> void fillList(List<T> data, int strategy) {
+    public SQLiteOpenHelper sqLiteOpenHelper;
+
+
+    public <T extends IBaseBean> void fillList(List<T> data, int strategy,IDataListCallback<T> callback) {
+        assert (data.size() > 0);
+        Class<?> clazz = data.get(0).getClass();
+        switch (strategy) {
+            case DataStrategy.CACHE_POLICY_NETWORK_ONLY:
+               fillListRemote(data,clazz,callback);
+                break;
+            case DataStrategy.CACHE_POLICY_CACHE_ONLY:
+                for(T dataItem :data){
+                    fillSingleUsingLocal(dataItem);
+                }
+                callback.onDataListReturn(data, -1, -1);
+                break;
+
+
+        }
 
     }
 
+    private <T extends IBaseBean> Map<String, T> listToMap(List<T> data, Class<?> clazz) {
+        Map<String, T> map = new HashMap<>();
+        final Field idField = findFieldWithAnnotation(clazz, Id.class);
+        idField.setAccessible(true);
+
+        if (idField == null) {
+            return map;
+        }
+        try {
+
+            for (T dataItem : data) {
+
+                String itemId = (String) idField.get(dataItem);
+                map.put(itemId, dataItem);
+
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+
     private <T extends IBaseBean> boolean fillSingleUsingLocal(T data) {
+        SQLiteDatabase db =sqLiteOpenHelper.getWritableDatabase();
+
         return false;
     }
 
@@ -83,22 +131,32 @@ public class ModelDao {
 
     }
 
-    /**
-     * @param map
-     * @param idList
-     * @param <T>
-     */
-    public <T extends IBaseBean> void fillListRemote(final Map<String, T> map, String... idList) {
+    private <T extends IBaseBean> String implodeListIds(List<T> data, Class<?> clazz) {
+        final Field idField = findFieldWithAnnotation(clazz, Id.class);
+        idField.setAccessible(true);
+        String str = "";
+        try {
+            for (T dataItem : data) {
 
-        if (idList.length <= 0) {
-            return;
-        }
+                String itemId = (String) idField.get(dataItem);
+                str +=itemId+",";
 
-        T sampleObj = map.get(idList[0]);
-        if (sampleObj == null) {
-            return;
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
-        Class<?> clazz = sampleObj.getClass();
+        if(str.length()>0){
+            str = str.substring(0,str.length()-1);
+        }
+        return str;
+
+
+    }
+
+    public <T extends IBaseBean> void fillListRemote(final List<T> data, Class<?> clazz, final IDataListCallback<T> callback) {
+
+        final Map<String, T> map = listToMap(data, clazz);
+
 
         if (!clazz.isAnnotationPresent(RemoteQuery.class)) {
             return;
@@ -111,7 +169,7 @@ public class ModelDao {
             return;
         }
 
-        String remoteId = TextUtils.implode(",", idList);
+        String remoteId = implodeListIds(data,clazz);
 
         String url = urlFormat.replace("{?}", remoteId);
 
@@ -161,6 +219,11 @@ public class ModelDao {
                                 }
 
                             }
+
+                            if(callback != null){
+                                callback.onDataListReturn(data,-1,-1);
+                            }
+
                         } catch (JSONException | IllegalAccessException | InstantiationException e) {
                             e.printStackTrace();
                         }
@@ -171,6 +234,9 @@ public class ModelDao {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        if(callback!= null){
+                            callback.onError(new ErrorBean(255,error.getMessage()));
+                        }
 
                     }
                 }
