@@ -50,7 +50,9 @@ public class ModelDao {
     }
 
 
-    public SQLiteOpenHelper sqLiteOpenHelper;
+    private SQLiteOpenHelper sqLiteOpenHelper;
+
+
 
 
     public <T extends IBaseBean> void fillList(List<T> data, int strategy,IDataListCallback<T> callback) {
@@ -97,8 +99,18 @@ public class ModelDao {
     private <T extends IBaseBean> boolean fillSingleUsingLocal(T data) {
         SQLiteDatabase db =sqLiteOpenHelper.getWritableDatabase();
 
+
+
         return false;
     }
+
+    private <T extends IBaseBean> void updateLocalWithData(T data) {
+        SQLiteDatabase db =sqLiteOpenHelper.getWritableDatabase();
+
+
+
+    }
+
 
 
     private <T extends Annotation> Field findFieldWithAnnotation(Class<?> targetClazz, Class<T> annoClazz) {
@@ -217,6 +229,7 @@ public class ModelDao {
                                     }
 
                                 }
+                                updateLocalWithData(obj2);
 
                             }
 
@@ -253,4 +266,7 @@ public class ModelDao {
     }
 
 
+    public void setSqLiteOpenHelper(SQLiteOpenHelper sqLiteOpenHelper) {
+        this.sqLiteOpenHelper = sqLiteOpenHelper;
+    }
 }
