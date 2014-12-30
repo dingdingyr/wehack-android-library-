@@ -1,9 +1,10 @@
-package cn.wehax.common.framework.data;
+package cn.wehax.common.volley;
 
 import android.app.Application;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
@@ -18,6 +19,7 @@ public class RequestManager {
     Application mApplication;
     private RequestQueue mRequestQueue;
 
+    @Inject
     RequestManager(Provider<Application> provider){
         mApplication = provider.get();
     }

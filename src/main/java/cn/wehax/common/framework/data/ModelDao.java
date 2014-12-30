@@ -28,6 +28,7 @@ import cn.wehax.common.framework.data.annotations.ValueFrom;
 import cn.wehax.common.framework.model.ErrorBean;
 import cn.wehax.common.framework.model.IBaseBean;
 import cn.wehax.common.framework.model.IDataListCallback;
+import cn.wehax.common.volley.RequestManager;
 
 /**
  * Created by Terry on 14/12/20.
