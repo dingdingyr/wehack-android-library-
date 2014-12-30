@@ -42,7 +42,7 @@ public class RequestHeaderUtil {
         sb.append(getChannelId());
 
         sb.append("/");
-        sb.append(getDeviceId(context));
+        sb.append(DeviceUtil.getDeviceId(context));
 
         sb.append("/");
         sb.append(getPushId());
@@ -93,15 +93,6 @@ public class RequestHeaderUtil {
     private static String getChannelId(){
         //TODO: 获取渠道号
         return NONE;
-    }
-
-    /**
-     * 获取设备id
-     * @param context
-     * @return
-     */
-    private static String getDeviceId(Context context){
-        return DeviceUtil.getDeviceId(context);
     }
 
     /**
