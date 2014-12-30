@@ -4,11 +4,6 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
-
 /**
  * Created by howe on 14/12/29.
  * Email:howejee@gmail.com
@@ -53,7 +48,7 @@ public class RequestHeaderUtil {
         sb.append(getPushId());
 
         sb.append("/");
-        sb.append(getIpAddress());
+        sb.append(NetworkUtil.getIpAddress());
 
         return sb.toString();
     }
@@ -118,28 +113,4 @@ public class RequestHeaderUtil {
     }
 
 
-    /**
-     * 获取ip地址
-     */
-    private static String getIpAddress(){
-        String ipAddress=NONE;
-
-        try {
-            Enumeration<NetworkInterface> enumeNetwork = NetworkInterface
-                    .getNetworkInterfaces();
-            while (enumeNetwork.hasMoreElements()) {
-                NetworkInterface networkInterface = enumeNetwork.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = networkInterface
-                        .getInetAddresses(); enumIpAddr.hasMoreElements();) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress()) {
-                        ipAddress = inetAddress.getHostAddress().toString();
-                    }
-                }
-            }
-        } catch (SocketException ex) {
-
-        }
-        return ipAddress;
-    }
 }

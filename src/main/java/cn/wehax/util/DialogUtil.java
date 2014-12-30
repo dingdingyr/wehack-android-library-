@@ -11,7 +11,7 @@ import cn.wehax.common.R;
 /**
  * Created by mayuhan on 14/12/13.
  */
-public class DialogUtils {
+public class DialogUtil {
     public static void showSingleChoiceListDialog(Context context, String title, String[] items, DialogInterface.OnClickListener onItemClickCallBack) {
         Dialog alertDialog = new AlertDialog.Builder(context)
                 .setTitle(title)

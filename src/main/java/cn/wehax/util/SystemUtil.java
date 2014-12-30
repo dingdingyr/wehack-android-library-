@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 提供与Android系统有关的辅助方法
  */
-public class AndroidSystemUtil {
+public class SystemUtil {
 
     /**
      * 检测一个android程序是否在运行
