@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import cn.wehax.common.framework.data.annotations.Id;
 import cn.wehax.common.framework.data.annotations.ObjectFrom;
 import cn.wehax.common.framework.data.annotations.ValueFrom;
+import cn.wehax.common.framework.model.IBaseBean;
 
 /**
  * Created by Terry on 15/1/4.
@@ -108,5 +109,9 @@ public class ObjectHelper {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static <T extends IBaseBean> void copy(T from, T to) {
+        //TODO: copy every field
     }
 }
