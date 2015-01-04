@@ -35,7 +35,7 @@ import roboguice.RoboGuice;
  * mail: zhichangterry@gmail.com
  * QQ: 1090035354
  */
-public class ModelDao<T extends IBaseBean> {
+public class RemoteAndDbDao<T extends IBaseBean> {
 
 
     @Inject
@@ -45,7 +45,7 @@ public class ModelDao<T extends IBaseBean> {
 
     OrmLiteSqliteOpenHelper ormHelper;
 
-    public ModelDao(Class<T> clazz, OrmLiteSqliteOpenHelper ormHelper, Context context) {
+    public RemoteAndDbDao(Class<T> clazz, OrmLiteSqliteOpenHelper ormHelper, Context context) {
         this.ormHelper = ormHelper;
         try {
             dao = ormHelper.getDao(clazz);
@@ -102,23 +102,50 @@ public class ModelDao<T extends IBaseBean> {
 
         try {
             List<T> tempData = dao.queryForMatching(data);
+            //TODO: 修改为更加普遍的query.
             if (tempData.size() > 0) {
                 ObjectHelper.copy(tempData.get(0), data);
+                return true;
+            }else{
+                return false;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return true;
     }
 
-    private void updateLocalWithData(T data) {
+    private boolean updateLocalWithData(T data) {
         try {
             dao.createOrUpdate(data);
-
+            //TODO: 确定自身表的对应字段是否已保存。
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
+        }
+        List<Field> toBeCreateField = ObjectHelper.findFieldListWithAnnotation(data.getClass(), ObjectFrom.class);
+        for (Field field : toBeCreateField) {
+            //在foreign-key对应的表里添加数据,这里只添加主id。
+            Class<?> clazz =field.getDeclaringClass();
+            Dao<Object,Integer> subDao = null;
+            try {
+                subDao = ormHelper.getDao(clazz);
+            } catch (SQLException e) {
+                return false;
+            }
+            field.setAccessible(true);
+            try {
+                subDao.create(field.get(data));
+                //新增到foreign-key对应的表。
+            } catch (SQLException e) {
+                //如果已经存在，不处理
+            } catch (IllegalAccessException e) {
+                return false;
+            }
+
         }
 
+        return true;
     }
 
 
@@ -182,33 +209,33 @@ public class ModelDao<T extends IBaseBean> {
                         try {
                             for (int i = 0; i < response.length(); i++) {
 
-                                JSONObject obj = response.getJSONObject(i);
-                                String id = obj.getString(idDataKey);
-                                T obj2 = map.get(id);
-                                if (obj2 == null) continue;
-                                idField.set(obj2, id);
+                                JSONObject jsonObj = response.getJSONObject(i);
+                                String id = jsonObj.getString(idDataKey);
+                                T obj = map.get(id);
+                                if (obj == null) continue;
+                                idField.set(obj, id);
 
-                                Field[] fields = obj2.getClass().getFields();
+                                Field[] fields = obj.getClass().getFields();
 
                                 for (Field field : fields) {
                                     if (field.isAnnotationPresent(ValueFrom.class)) {
                                         ValueFrom valueAnnotation = field.getAnnotation(ValueFrom.class);
                                         String dataKey = valueAnnotation.dataKey();
-                                        ObjectHelper.setField(obj2, field, obj, dataKey);
+                                        ObjectHelper.setFieldUsingJson(obj, field, jsonObj, dataKey);
 
                                     } else if (field.isAnnotationPresent(ObjectFrom.class)) {
                                         ObjectFrom objectAnnotation = field.getAnnotation(ObjectFrom.class);
                                         String dataKey = objectAnnotation.dataKey();
                                         Object subObj = field.getClass().newInstance();
                                         Field subIdField = ObjectHelper.findFieldWithAnnotation(field.getClass(), Id.class);
-                                        ObjectHelper.setField(subObj, subIdField, obj, dataKey);
+                                        ObjectHelper.setFieldUsingJson(subObj, subIdField, jsonObj, dataKey);
 
-                                        field.set(obj2, subObj);
+                                        field.set(obj, subObj);
 
                                     }
 
                                 }
-                                updateLocalWithData(obj2);
+                                updateLocalWithData(obj);
 
                             }
 
