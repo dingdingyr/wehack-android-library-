@@ -45,6 +45,37 @@ public class TimeUtils {
     }
 
     /**
+     * 1h=3600s
+     */
+    private final static int SECOND_IN_HOUR = 3600;
+    /**
+     * 1m=60s
+     */
+    private final static int SECOND_IN_MINUTE = 60;
+    /**
+     * 1h=60m
+     */
+    private final static int MINUTE_IN_HOUR = 60;
+
+    /**
+     * 格式化视频录制时间（时间格式：hh:mm:ss'）
+     *
+     * @param seconds 视频录制时间（单位秒）
+     *
+     * @return
+     */
+    public static String getFormatRecordTime(long seconds) {
+        long hh = seconds / SECOND_IN_HOUR;
+        long mm = seconds % SECOND_IN_HOUR;
+        long ss = mm % SECOND_IN_MINUTE;
+        mm = mm / SECOND_IN_MINUTE;
+
+        return (mm == 0 ? "" : (mm < 10 ? "0" + mm : mm) + ":")
+                + (ss == 0 ? "" : (ss < 10 ? "0" + ss : ss) + "'");
+    }
+
+
+    /**
      * 计算两个日期之间相差多少天
      */
     public static int getDateDifference(long millis1, long millis2){

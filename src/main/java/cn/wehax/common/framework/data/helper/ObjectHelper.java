@@ -20,6 +20,7 @@ public class ObjectHelper {
 
     public static void setField(Object obj2, Field field, JSONObject obj, String dataKey) {
         try {
+            field.setAccessible(true);
             if (field.getType().equals(String.class)) {
                 field.set(obj2, obj.optString(dataKey));
             } else if (field.getType().equals(Integer.class)) {
@@ -39,7 +40,7 @@ public class ObjectHelper {
 
     public static <T extends Annotation> Field findFieldWithAnnotation(Class<?> targetClazz, Class<T> annoClazz) {
 
-        final Field[] fields = targetClazz.getFields();
+        final Field[] fields = targetClazz.getDeclaredFields();
 
         for (Field field : fields) {
             if (field.isAnnotationPresent(annoClazz)) {
@@ -50,7 +51,7 @@ public class ObjectHelper {
 
     }
 
-    public static <T> T parseJson(JSONObject obj, Class<T> clazz)  {
+    public static <T> T parseJson(JSONObject obj, Class<T> clazz) throws JSONException{
 
 
         try {
@@ -64,10 +65,10 @@ public class ObjectHelper {
 
             String id = obj.getString(idDataKey);
             T classObj = clazz.newInstance();
-
+            idField.setAccessible(true);
             idField.set(classObj, id);
 
-            Field[] fields = classObj.getClass().getFields();
+            Field[] fields = classObj.getClass().getDeclaredFields();
 
             for (Field field : fields) {
                 if (field.isAnnotationPresent(ValueFrom.class)) {
@@ -92,20 +93,16 @@ public class ObjectHelper {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
 
         return null;
     }
 
-    public static <T> T parseJson(String json, Class<T> clazz) {
+    public static <T> T parseJson(String json, Class<T> clazz) throws JSONException {
         try {
             JSONObject obj = new JSONObject(json);
             return parseJson(obj, clazz);
-
-
-        } catch (JSONException e) {
+        }catch (Exception e){
             e.printStackTrace();
         }
         return null;
