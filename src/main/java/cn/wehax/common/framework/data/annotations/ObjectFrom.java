@@ -15,5 +15,4 @@ import java.lang.annotation.Target;
 public @interface ObjectFrom {
     String dataKey();
 
-    String objectKey();
 }
