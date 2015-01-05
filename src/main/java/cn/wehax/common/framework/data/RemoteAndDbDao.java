@@ -127,7 +127,7 @@ public class RemoteAndDbDao<T extends IBaseBean> {
         for (Field field : toBeCreateField) {
             //在foreign-key对应的表里添加数据,这里只添加主id。
             Class<?> clazz =field.getDeclaringClass();
-            Dao<Object,Integer> subDao = null;
+            Dao subDao = null;
             try {
                 subDao = ormHelper.getDao(clazz);
             } catch (SQLException e) {
