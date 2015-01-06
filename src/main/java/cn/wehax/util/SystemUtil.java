@@ -117,7 +117,7 @@ public class SystemUtil {
      * @param context
      */
     public static void killProcess(Context context) {
-        ActivityManager activityManger = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+        ActivityManager activityManger = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<RunningAppProcessInfo> list = activityManger.getRunningAppProcesses();// 得到正在运行的进程信息
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {

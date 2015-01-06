@@ -12,11 +12,11 @@ import java.io.InputStream;
  */
 public class ImageUtil {
 
-    public static byte[] readStream ( InputStream inStream ) throws Exception{
+    public static byte[] readStream(InputStream inStream) throws Exception {
         byte[] buffer = new byte[1024];
         int len = -1;
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-        while ((len = inStream.read(buffer)) != -1){
+        while ((len = inStream.read(buffer)) != -1) {
             outStream.write(buffer, 0, len);
         }
         byte[] data = outStream.toByteArray();
@@ -31,7 +31,7 @@ public class ImageUtil {
      *
      * @return
      */
-    public static Bitmap getSmallBitmap(byte[] bytes,int reqWidth, int reqHeight){
+    public static Bitmap getSmallBitmap(byte[] bytes, int reqWidth, int reqHeight) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
@@ -54,7 +54,7 @@ public class ImageUtil {
      * @return
      */
     public static int calculateInSampleSize(BitmapFactory.Options options,
-                                     int reqWidth, int reqHeight) {
+                                            int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -78,7 +78,7 @@ public class ImageUtil {
         return inSampleSize;
     }
 
-    public static Bitmap getSmallBitmap(String filePath,int reqWidth, int reqHeight) {
+    public static Bitmap getSmallBitmap(String filePath, int reqWidth, int reqHeight) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(filePath, options);
