@@ -3,5 +3,5 @@
 
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
-
+    <string name="title_choose_photo_source">选择获取照片方式</string>
 </resources>

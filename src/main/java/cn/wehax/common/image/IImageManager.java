@@ -10,4 +10,6 @@ public interface IImageManager {
      * @return
      */
     public ImageLoader getImageLoader();
+
+
 }
