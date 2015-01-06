@@ -30,6 +30,8 @@ import cn.wehax.common.framework.model.IDataListCallback;
 import cn.wehax.common.volley.RequestManager;
 import roboguice.RoboGuice;
 
+import static cn.wehax.common.exception.Assertion.assertThat;
+
 /**
  * Created by Terry on 14/12/20.
  * mail: zhichangterry@gmail.com
@@ -57,7 +59,7 @@ public class RemoteAndDbDao<T extends IBaseBean> {
 
 
     public void fillList(List<T> data, int strategy, IDataListCallback<T> callback) {
-        assert (data.size() > 0);
+        assertThat(data.size() > 0);
         Class<?> clazz = data.get(0).getClass();
         switch (strategy) {
             case DataStrategy.CACHE_POLICY_NETWORK_ONLY:

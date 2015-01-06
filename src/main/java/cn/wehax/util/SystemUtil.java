@@ -5,7 +5,10 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
+import android.os.Build;
 import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
 
 import java.util.List;
 
@@ -69,6 +72,20 @@ public class SystemUtil {
         return dm;
     }
 
+
+    /** 获取屏幕宽度 */
+    @SuppressWarnings("deprecation")
+    public static int getScreenWidth(Context context) {
+        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        return display.getWidth();
+    }
+
+    @SuppressWarnings("deprecation")
+    public static int getScreenHeight(Context context) {
+        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        return display.getHeight();
+    }
+
     /**
      * 获取手机状态栏高度
      *
@@ -100,7 +117,7 @@ public class SystemUtil {
      * @param context
      */
     public static void killProcess(Context context) {
-        ActivityManager activityManger = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+        ActivityManager activityManger = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<RunningAppProcessInfo> list = activityManger.getRunningAppProcesses();// 得到正在运行的进程信息
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
@@ -134,5 +151,57 @@ public class SystemUtil {
                 }
             }
         }
+    }
+
+
+    /** >=2.2 */
+    public static boolean hasFroyo() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO;
+    }
+
+    /** >=2.3 */
+    public static boolean hasGingerbread() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD;
+    }
+
+    /** >=3.0 LEVEL:11 */
+    public static boolean hasHoneycomb() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+    }
+
+    /** >=3.1 */
+    public static boolean hasHoneycombMR1() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1;
+    }
+
+    /** >=4.0 14 */
+    public static boolean hasICS() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+    }
+
+    /**
+     * >= 4.1 16
+     */
+    public static boolean hasJellyBean() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+    }
+
+    /** >= 4.2 17 */
+    public static boolean hasJellyBeanMr1() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
+    }
+
+    /** >= 4.3 18 */
+    public static boolean hasJellyBeanMr2() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2;
+    }
+
+    public static int getSDKVersionInt() {
+        return Build.VERSION.SDK_INT;
+    }
+
+    @SuppressWarnings("deprecation")
+    public static String getSDKVersion() {
+        return Build.VERSION.SDK;
     }
 }

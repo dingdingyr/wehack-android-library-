@@ -56,7 +56,7 @@ public class StringUtil {
      * @param str
      * @return
      */
-    public static boolean isNotEmpty(String str){
+    public static boolean isNotEmpty(String str) {
         return !isNullOrEmpty(str);
     }
 
@@ -127,5 +127,43 @@ public class StringUtil {
         if (str1 == null)
             str1 = "";
         return str1.equals(str2);
+    }
+
+
+    /**
+     * 拼接字符串
+     *
+     * @param strs
+     * @return
+     */
+    public static String concat(String... strs) {
+        StringBuffer result = new StringBuffer();
+        if (strs != null) {
+            for (String str : strs) {
+                if (str != null)
+                    result.append(str);
+            }
+        }
+        return result.toString();
+    }
+
+    /**
+     * Helper function for making null strings safe for comparisons, etc.
+     *
+     * @return (s == null) ? "" : s;
+     */
+    public static String makeSafe(String s) {
+        return (s == null) ? "" : s;
+    }
+
+    public static final String EMPTY = "";
+
+    /**
+     * 去除字符串首部和尾部的空白字符，返回处理后字符串
+     *
+     * @param str
+     */
+    public static String trim(String str) {
+        return str == null ? EMPTY : str.trim();
     }
 }
