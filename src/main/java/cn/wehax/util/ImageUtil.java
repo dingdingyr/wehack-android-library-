@@ -1,10 +1,20 @@
 package cn.wehax.util;
 
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+
+import cn.wehax.common.R;
 
 /**
  * Created by howe on 14/12/18.
@@ -12,11 +22,104 @@ import java.io.InputStream;
  */
 public class ImageUtil {
 
-    public static byte[] readStream ( InputStream inStream ) throws Exception{
+    public static void chooseImage(Activity activity,int requestCode){
+        chooseImage(activity,requestCode,false);
+    }
+
+    public static void chooseImage(Activity activity,int requestCode,boolean isModifyImage){
+        Intent pickIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        pickIntent.setType("image/*");
+        if(isModifyImage) {
+            initModifyImageConfig(pickIntent);
+        }
+
+
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if(isModifyImage) {
+            initModifyImageConfig(takePhotoIntent);
+        }
+
+        Intent chooserIntent = Intent.createChooser(
+                pickIntent, activity.getString(R.string.title_choose_photo_source));
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePhotoIntent});
+        activity.startActivityForResult(chooserIntent, requestCode);
+    }
+
+    private static void initModifyImageConfig(final Intent intent){
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 200);
+        intent.putExtra("outputY", 200);
+        intent.putExtra("return-data", true);
+    }
+
+    public static Bitmap  doImageFromPick(Activity activity,Intent data,String imagePath){
+        ContentResolver resolver = activity.getContentResolver();
+        Bitmap bitmap = null;
+        try {
+            Uri uri = data.getData();
+            byte[] mContent = readStream(resolver.openInputStream(Uri.parse(uri.toString())));
+            if (mContent == null) {
+                return null;
+            }
+            bitmap = ImageUtil.getSmallBitmap(mContent, 480, 800);
+            saveImage(bitmap,imagePath);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return bitmap;
+    }
+
+    public static Bitmap  doImageFromCamera(Intent data,String imagePath){
+        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+        saveImage(bitmap,imagePath);
+        return bitmap;
+    }
+
+    private static void  saveImage(Bitmap bitmap ,String imagePath){
+        FileOutputStream out = null;
+        try {
+            File file = new File(imagePath);
+            if (file.exists()) {
+                file.delete();
+            }
+
+            out = new FileOutputStream(file, false);
+            bitmap.compress(Bitmap.CompressFormat.PNG,100, out);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.flush();
+                    out.close();
+                    out = null;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 头像文件名
+     *
+     * @param sid
+     * @return
+     */
+    public static String createAvatarFileName(String sid) {
+        return "avatar_" + sid + ".png";
+    }
+
+
+    public static byte[] readStream(InputStream inStream) throws Exception {
         byte[] buffer = new byte[1024];
         int len = -1;
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-        while ((len = inStream.read(buffer)) != -1){
+        while ((len = inStream.read(buffer)) != -1) {
             outStream.write(buffer, 0, len);
         }
         byte[] data = outStream.toByteArray();
@@ -31,7 +134,7 @@ public class ImageUtil {
      *
      * @return
      */
-    public static Bitmap getSmallBitmap(byte[] bytes,int reqWidth, int reqHeight){
+    public static Bitmap getSmallBitmap(byte[] bytes, int reqWidth, int reqHeight) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
@@ -54,7 +157,7 @@ public class ImageUtil {
      * @return
      */
     public static int calculateInSampleSize(BitmapFactory.Options options,
-                                     int reqWidth, int reqHeight) {
+                                            int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -78,7 +181,7 @@ public class ImageUtil {
         return inSampleSize;
     }
 
-    public static Bitmap getSmallBitmap(String filePath,int reqWidth, int reqHeight) {
+    public static Bitmap getSmallBitmap(String filePath, int reqWidth, int reqHeight) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(filePath, options);

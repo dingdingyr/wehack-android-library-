@@ -10,7 +10,7 @@ import roboguice.activity.RoboFragmentActivity;
  * mail: zhichangterry@gmail.com
  * QQ: 1090035354
  */
-public class SkeletonBaseActivity extends RoboFragmentActivity implements IBaseView {
+public abstract class SkeletonBaseActivity extends RoboFragmentActivity implements IBaseView {
 
 
     @Override
