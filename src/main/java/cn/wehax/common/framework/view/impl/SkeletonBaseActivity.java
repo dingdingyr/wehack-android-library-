@@ -19,13 +19,13 @@ public class SkeletonBaseActivity extends RoboFragmentActivity implements IBaseV
     }
 
     @Override
-    public void showWaitingMessage(String msg) {
+    public void showWaitingDialog(String msg) {
         //TODO:
 
     }
 
     @Override
-    public void hideWaitingMessage() {
+    public void hideWaitingDialog() {
         //TODO:
 
     }
