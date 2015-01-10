@@ -8,6 +8,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.inject.Inject;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.table.TableUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +44,7 @@ public class RemoteAndDbDao<T extends IBaseBean> {
     @Inject
     RequestManager requestManager;
 
-    Dao<T, Integer> dao;
+    Dao<T, Object> dao;
 
     OrmLiteSqliteOpenHelper ormHelper;
 
@@ -51,7 +52,8 @@ public class RemoteAndDbDao<T extends IBaseBean> {
         this.ormHelper = ormHelper;
         try {
             dao = ormHelper.getDao(clazz);
-            RoboGuice.injectMembers(context, this);
+//            RoboGuice.injectMembers(context, this);
+            TableUtils.createTableIfNotExists(ormHelper.getConnectionSource(),clazz);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -117,7 +119,7 @@ public class RemoteAndDbDao<T extends IBaseBean> {
         return true;
     }
 
-    private boolean updateLocalWithData(T data) {
+    public boolean updateLocalWithData(T data) {
         try {
             dao.createOrUpdate(data);
             //TODO: 确定自身表的对应字段是否已保存。
@@ -128,9 +130,10 @@ public class RemoteAndDbDao<T extends IBaseBean> {
         List<Field> toBeCreateField = ObjectHelper.findFieldListWithAnnotation(data.getClass(), ObjectFrom.class);
         for (Field field : toBeCreateField) {
             //在foreign-key对应的表里添加数据,这里只添加主id。
-            Class<?> clazz =field.getDeclaringClass();
+            Class<?> clazz =field.getType();
             Dao subDao = null;
             try {
+                TableUtils.createTableIfNotExists(ormHelper.getConnectionSource(),clazz);
                 subDao = ormHelper.getDao(clazz);
             } catch (SQLException e) {
                 return false;
@@ -273,5 +276,25 @@ public class RemoteAndDbDao<T extends IBaseBean> {
         // 都创建一个对应类型的对象，对其他属性则直接填充bean的对应属性。
     }
 
+    public boolean idExists(Object id){
+        try {
+            return dao.idExists(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public T queryFirstLocal() throws SQLException {
+        List<T> list = dao.queryForAll();
+        if(list != null && !list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
+    }
+
+    public T queryLocalById(Object id) throws SQLException {
+        return dao.queryForId(id);
+    }
 
 }
