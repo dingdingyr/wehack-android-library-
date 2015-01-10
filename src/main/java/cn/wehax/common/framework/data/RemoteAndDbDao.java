@@ -41,18 +41,17 @@ import static cn.wehax.common.exception.Assertion.assertThat;
 public class RemoteAndDbDao<T extends IBaseBean> {
 
 
-    @Inject
     RequestManager requestManager;
 
     Dao<T, Object> dao;
 
     OrmLiteSqliteOpenHelper ormHelper;
 
-    public RemoteAndDbDao(Class<T> clazz, OrmLiteSqliteOpenHelper ormHelper, Context context) {
+    public RemoteAndDbDao(Class<T> clazz, OrmLiteSqliteOpenHelper ormHelper, RequestManager requestManager) {
         this.ormHelper = ormHelper;
+        this.requestManager = requestManager;
         try {
             dao = ormHelper.getDao(clazz);
-//            RoboGuice.injectMembers(context, this);
             TableUtils.createTableIfNotExists(ormHelper.getConnectionSource(),clazz);
         } catch (SQLException e) {
             e.printStackTrace();
