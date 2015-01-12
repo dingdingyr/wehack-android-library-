@@ -1,11 +1,8 @@
 package cn.wehax.common.framework.data;
 
-import android.content.Context;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.google.inject.Inject;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.table.TableUtils;
@@ -29,7 +26,6 @@ import cn.wehax.common.framework.model.ErrorBean;
 import cn.wehax.common.framework.model.IBaseBean;
 import cn.wehax.common.framework.model.IDataListCallback;
 import cn.wehax.common.volley.RequestManager;
-import roboguice.RoboGuice;
 
 import static cn.wehax.common.exception.Assertion.assertThat;
 
@@ -52,7 +48,7 @@ public class RemoteAndDbDao<T extends IBaseBean> {
         this.requestManager = requestManager;
         try {
             dao = ormHelper.getDao(clazz);
-            TableUtils.createTableIfNotExists(ormHelper.getConnectionSource(),clazz);
+            TableUtils.createTableIfNotExists(ormHelper.getConnectionSource(), clazz);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -109,7 +105,7 @@ public class RemoteAndDbDao<T extends IBaseBean> {
             if (tempData.size() > 0) {
                 ObjectHelper.copy(tempData.get(0), data);
                 return true;
-            }else{
+            } else {
                 return false;
             }
         } catch (SQLException e) {
@@ -129,10 +125,10 @@ public class RemoteAndDbDao<T extends IBaseBean> {
         List<Field> toBeCreateField = ObjectHelper.findFieldListWithAnnotation(data.getClass(), ObjectFrom.class);
         for (Field field : toBeCreateField) {
             //在foreign-key对应的表里添加数据,这里只添加主id。
-            Class<?> clazz =field.getType();
+            Class<?> clazz = field.getType();
             Dao subDao = null;
             try {
-                TableUtils.createTableIfNotExists(ormHelper.getConnectionSource(),clazz);
+                TableUtils.createTableIfNotExists(ormHelper.getConnectionSource(), clazz);
                 subDao = ormHelper.getDao(clazz);
             } catch (SQLException e) {
                 return false;
@@ -265,7 +261,9 @@ public class RemoteAndDbDao<T extends IBaseBean> {
                 }
 
         );
-        requestManager.getRequestQueue().add(arrayRequest);
+        if (requestManager != null) {
+            requestManager.getRequestQueue().add(arrayRequest);
+        }
 
 
         //输入一个除了id和updateTime为空的bean列表
@@ -275,7 +273,7 @@ public class RemoteAndDbDao<T extends IBaseBean> {
         // 都创建一个对应类型的对象，对其他属性则直接填充bean的对应属性。
     }
 
-    public boolean idExists(Object id){
+    public boolean idExists(Object id) {
         try {
             return dao.idExists(id);
         } catch (SQLException e) {
@@ -286,7 +284,7 @@ public class RemoteAndDbDao<T extends IBaseBean> {
 
     public T queryFirstLocal() throws SQLException {
         List<T> list = dao.queryForAll();
-        if(list != null && !list.isEmpty()){
+        if (list != null && !list.isEmpty()) {
             return list.get(0);
         }
         return null;
