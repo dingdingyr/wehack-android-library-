@@ -47,12 +47,12 @@ public class RemoteAndDbDao<T extends IBaseBean> {
 
     OrmLiteSqliteOpenHelper ormHelper;
 
-    public RemoteAndDbDao(Class<T> clazz, OrmLiteSqliteOpenHelper ormHelper,RequestManager requestManager) {
+    public RemoteAndDbDao(Class<T> clazz, OrmLiteSqliteOpenHelper ormHelper, RequestManager requestManager) {
         this.ormHelper = ormHelper;
+        this.requestManager = requestManager;
         try {
             dao = ormHelper.getDao(clazz);
             TableUtils.createTableIfNotExists(ormHelper.getConnectionSource(),clazz);
-            this.requestManager = requestManager;
         } catch (SQLException e) {
             e.printStackTrace();
         }
