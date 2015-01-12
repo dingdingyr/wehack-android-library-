@@ -14,6 +14,7 @@ import cn.wehax.common.framework.data.annotations.Id;
 import cn.wehax.common.framework.data.annotations.ObjectFrom;
 import cn.wehax.common.framework.data.annotations.ValueFrom;
 import cn.wehax.common.framework.model.IBaseBean;
+import cn.wehax.common.framework.model.IDataBean;
 
 /**
  * Created by Terry on 15/1/4.
@@ -123,7 +124,7 @@ public class ObjectHelper {
      * @return 返回一个新的对象。
      * @throws JSONException
      */
-    public static <T> T parseJSONToObject(JSONObject jsonObj, Class<T> clazz) throws JSONException {
+    public static <T extends IDataBean> T parseJSONToObject(JSONObject jsonObj, Class<T> clazz) throws JSONException {
 
 
         try {
@@ -139,6 +140,7 @@ public class ObjectHelper {
             T classObj = clazz.newInstance();
             idField.setAccessible(true);
             idField.set(classObj, id);
+            classObj.setComplete(true);
 
             Field[] fields = classObj.getClass().getDeclaredFields();
 
@@ -153,6 +155,10 @@ public class ObjectHelper {
                     ObjectFrom objectAnnotation = field.getAnnotation(ObjectFrom.class);
                     String dataKey = objectAnnotation.dataKey();
                     Object subObj = field.getType().newInstance();
+                    if(subObj instanceof IDataBean){
+                        IDataBean bean = (IDataBean)subObj;
+                        bean.setComplete(false);
+                    }
                     JSONObject obj = jsonObj.optJSONObject(dataKey);
                     if (obj != null) {
                         Field subIdField = findFieldWithAnnotation(field.getType(), Id.class);
@@ -198,7 +204,7 @@ public class ObjectHelper {
      * @return
      * @throws JSONException
      */
-    public static <T> T parseJSONToObject(String json, Class<T> clazz) throws JSONException {
+    public static <T extends IDataBean> T parseJSONToObject(String json, Class<T> clazz) throws JSONException {
         try {
             JSONObject obj = new JSONObject(json);
             return parseJSONToObject(obj, clazz);
