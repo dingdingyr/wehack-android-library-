@@ -261,7 +261,9 @@ public class RemoteAndDbDao<T extends IBaseBean> {
                 }
 
         );
-        requestManager.getRequestQueue().add(arrayRequest);
+        if (requestManager != null) {
+            requestManager.getRequestQueue().add(arrayRequest);
+        }
 
 
         //输入一个除了id和updateTime为空的bean列表
