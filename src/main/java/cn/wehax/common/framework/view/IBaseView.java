@@ -6,10 +6,11 @@ package cn.wehax.common.framework.view;
  * QQ: 1090035354
  */
 public interface IBaseView {
-    
+
     public void showErrorMessage(String err);
 
     public void showWaitingDialog(String msg);
+
 
     public void hideWaitingDialog();
 
