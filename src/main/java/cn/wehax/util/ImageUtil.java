@@ -2,6 +2,7 @@ package cn.wehax.util;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
@@ -27,6 +29,18 @@ import cn.wehax.common.R;
  * Email:howejee@gmail.com
  */
 public class ImageUtil {
+
+    public static String getLocalImagePath(Context context){
+        File file = new File(Environment.getExternalStorageDirectory()+"/android/data/"+context.getPackageName()+"/photo");
+        if(!file.exists()){
+            file.mkdirs();
+        }
+        return file.getPath();
+    }
+
+    public static String getImageName(int index){
+        return "img_"+index+".png";
+    }
 
     public static void chooseImage(Activity activity,int requestCode){
         chooseImage(activity,requestCode,false);
