@@ -248,4 +248,57 @@ public class ObjectHelper {
 
 
     }
+
+    public static <T extends IBaseBean> boolean merge(T from, T to) {
+        List<Field> fields = getAllFields(from.getClass());
+        try {
+            for (Field field : fields) {
+                field.setAccessible(true);
+                Object obj = field.get(from);
+                if (hasChangedValue(obj)) {
+                    field.set(to, field.get(from));
+                }
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+
+
+    }
+
+    public static boolean hasChangedValue(Object obj) {
+        if (obj != null) {
+            Class<?> objClass = obj.getClass();
+            String type = objClass.toString();
+            if (objClass.equals(String.class)
+                    || type.equalsIgnoreCase("String")) {
+                return String.valueOf(obj).length() > 0;
+
+            } else if (objClass.equals(Integer.class)
+                    || type.equalsIgnoreCase("int")) {
+                return (int) obj != 0;
+
+            } else if (objClass.equals(Double.class)
+                    || type.equalsIgnoreCase("double")) {
+
+                return (double) obj != 0;
+
+            } else if (objClass.equals(Long.class)
+                    || type.equalsIgnoreCase("long")) {
+
+                return (long) obj != 0;
+
+            } else if (objClass.equals(Boolean.class)
+                    || type.equalsIgnoreCase("boolean")) {
+
+                return (boolean) obj;
+
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
