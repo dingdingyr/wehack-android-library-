@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cn.wehax.common.framework.data.annotations.Id;
@@ -77,7 +78,7 @@ public class ObjectHelper {
      */
     public static <T extends Annotation> Field findFieldWithAnnotation(Class<?> targetClazz, Class<T> annotationClazz) {
 
-        final Field[] fields = targetClazz.getDeclaredFields();
+        final List<Field> fields = getAllFields(targetClazz);
 
         for (Field field : fields) {
             if (field.isAnnotationPresent(annotationClazz)) {
@@ -99,7 +100,7 @@ public class ObjectHelper {
 
     public static <T extends Annotation> List<Field> findFieldListWithAnnotation(Class<?> targetClazz, Class<T> annotationClazz) {
 
-        final Field[] fields = targetClazz.getDeclaredFields();
+        final List<Field> fields = getAllFields(targetClazz);
 
         List<Field> newFields = new ArrayList<>();
         for (Field field : fields) {
@@ -109,6 +110,14 @@ public class ObjectHelper {
         }
         return newFields;
 
+    }
+
+    public static List<Field> getAllFields(Class<?> type) {
+        List<Field> fields = new ArrayList<>();
+        for (Class<?> c = type; c != null; c = c.getSuperclass()) {
+            fields.addAll(Arrays.asList(c.getDeclaredFields()));
+        }
+        return fields;
     }
 
 
@@ -142,7 +151,8 @@ public class ObjectHelper {
             idField.set(classObj, id);
             classObj.setComplete(true);
 
-            Field[] fields = classObj.getClass().getDeclaredFields();
+            final List<Field> fields = getAllFields(classObj.getClass());
+
 
             for (Field field : fields) {
                 if (field.isAnnotationPresent(ValueFrom.class)) {
@@ -155,8 +165,8 @@ public class ObjectHelper {
                     ObjectFrom objectAnnotation = field.getAnnotation(ObjectFrom.class);
                     String dataKey = objectAnnotation.dataKey();
                     Object subObj = field.getType().newInstance();
-                    if(subObj instanceof IDataBean){
-                        IDataBean bean = (IDataBean)subObj;
+                    if (subObj instanceof IDataBean) {
+                        IDataBean bean = (IDataBean) subObj;
                         bean.setComplete(false);
                     }
                     JSONObject obj = jsonObj.optJSONObject(dataKey);
@@ -198,6 +208,7 @@ public class ObjectHelper {
     /**
      * 参见 parseJSONToObject(JSONObject jsonObj, Class<T> clazz) ,
      * 重载第一个参数为String。
+     *
      * @param json
      * @param clazz
      * @param <T>
@@ -216,13 +227,14 @@ public class ObjectHelper {
 
     /**
      * 将同类型的一个对象赋值到另一个同类型的对象里。
+     *
      * @param from
      * @param to
      * @param <T>
      * @return
      */
     public static <T extends IBaseBean> boolean copy(T from, T to) {
-        final Field[] fields = from.getClass().getDeclaredFields();
+        List<Field> fields = getAllFields(from.getClass());
         try {
             for (Field field : fields) {
                 field.setAccessible(true);
