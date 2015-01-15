@@ -2,11 +2,15 @@ package cn.wehax.common.framework.data.helper;
 
 import android.text.TextUtils;
 
+import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.j256.ormlite.dao.Dao;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -300,5 +304,55 @@ public class ObjectHelper {
         } else {
             return false;
         }
+    }
+
+    public static <T extends IDataBean> boolean persistSelfAndForeignToDB(T data, Dao<T, Object> dao, OrmLiteSqliteOpenHelper ormHelper) {
+        try {
+            dao.createOrUpdate(data);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        List<Field> toBeCreateField = ObjectHelper.findFieldListWithAnnotation(data.getClass(), ObjectFrom.class);
+        for (Field field : toBeCreateField) {
+            Class<?> clazz = field.getType();
+            if (IDataBean.class.isAssignableFrom(clazz)) {
+
+
+                Class<? extends IDataBean> dataClazz = (Class<? extends IDataBean>) clazz;
+                Dao subDao;
+                try {
+                    subDao = ormHelper.getDao(dataClazz);
+                } catch (SQLException e) {
+                    return false;
+                }
+                field.setAccessible(true);
+                try {
+                    IDataBean dirtyData = (IDataBean) field.get(data);
+                    Field idField = ObjectHelper.findFieldWithAnnotation(clazz, Id.class);
+                    Object id = idField.get(dirtyData);
+                    if (dao.idExists(id)) {
+                        IDataBean dataInDb = (IDataBean) subDao.queryForId(id);
+                        if (dataInDb.isComplete()) {
+                            //不用不完整的数据覆盖完整数据，不做操作。
+                        } else {
+                            //合并数据
+                            ObjectHelper.merge(dirtyData, dataInDb);
+                        }
+                        subDao.update(dataInDb);
+                    } else {
+                        subDao.create(dirtyData);
+                    }
+                    //新增到foreign-key对应的表。
+                } catch (SQLException e) {
+                    //如果已经存在，不处理
+                    return false;
+                } catch (IllegalAccessException e) {
+                    return false;
+                }
+            }
+
+        }
+        return true;
     }
 }
