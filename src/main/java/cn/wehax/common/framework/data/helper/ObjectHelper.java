@@ -137,19 +137,19 @@ public class ObjectHelper {
 
 
         try {
-            final Field idField = findFieldWithAnnotation(clazz, Id.class);
 
-            if (idField == null) {
-                return null;
+            T classObj = clazz.newInstance();
+            classObj.setComplete(true);
+
+
+            final Field idField = findFieldWithAnnotation(clazz, Id.class);
+            if (idField != null) {
+                final String idDataKey = idField.getAnnotation(Id.class).dataKey();
+                String id = jsonObj.optString(idDataKey);
+                idField.setAccessible(true);
+                idField.set(classObj, id);
             }
 
-            final String idDataKey = idField.getAnnotation(Id.class).dataKey();
-
-            String id = jsonObj.getString(idDataKey);
-            T classObj = clazz.newInstance();
-            idField.setAccessible(true);
-            idField.set(classObj, id);
-            classObj.setComplete(true);
 
             final List<Field> fields = getAllFields(classObj.getClass());
 
