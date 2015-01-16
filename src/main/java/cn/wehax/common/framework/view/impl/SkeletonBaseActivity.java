@@ -22,11 +22,26 @@ public abstract class SkeletonBaseActivity extends RoboFragmentActivity implemen
     }
 
     @Override
+    final public void showErrorMessage(int idRes) {
+        Toast.makeText(this, idRes, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    final public void showWaitingDialog(int idRes) {
+        showWaitingDialog(getResources().getString(idRes));
+    }
+
+    @Override
     public void showWaitingDialog(String msg) {
         //TODO:
-        mDialog = ProgressDialog.show(this,null, msg);
-        mDialog.setCanceledOnTouchOutside(false);
-        mDialog.setCancelable(false);
+        if(mDialog == null){
+            mDialog = ProgressDialog.show(this,null, msg);
+            mDialog.setCanceledOnTouchOutside(false);
+            mDialog.setCancelable(false);
+        }else{
+            mDialog.show();
+        }
+
     }
 
     @Override
@@ -37,6 +52,8 @@ public abstract class SkeletonBaseActivity extends RoboFragmentActivity implemen
         }
 
     }
+
+
 
 
 }

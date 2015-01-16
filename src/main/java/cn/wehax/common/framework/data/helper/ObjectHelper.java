@@ -330,9 +330,11 @@ public class ObjectHelper {
                 try {
                     IDataBean dirtyData = (IDataBean) field.get(data);
                     Field idField = ObjectHelper.findFieldWithAnnotation(clazz, Id.class);
+                    idField.setAccessible(true);
                     Object id = idField.get(dirtyData);
-                    if (dao.idExists(id)) {
+                    if (subDao.idExists(id)) {
                         IDataBean dataInDb = (IDataBean) subDao.queryForId(id);
+
                         if (dataInDb.isComplete()) {
                             //不用不完整的数据覆盖完整数据，不做操作。
                         } else {

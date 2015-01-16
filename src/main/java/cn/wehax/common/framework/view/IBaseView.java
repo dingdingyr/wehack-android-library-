@@ -9,8 +9,11 @@ public interface IBaseView {
 
     public void showErrorMessage(String err);
 
+    public void showErrorMessage(int idRes);
+
     public void showWaitingDialog(String msg);
 
+    public void showWaitingDialog(int idRes);
 
     public void hideWaitingDialog();
 

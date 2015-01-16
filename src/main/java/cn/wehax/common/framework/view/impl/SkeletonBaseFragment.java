@@ -18,8 +18,19 @@ public class SkeletonBaseFragment extends RoboFragment implements IBaseView {
     }
 
     @Override
+    public void showErrorMessage(int idRes) {
+        if (getActivity() != null && !getActivity().isFinishing())
+            Toast.makeText(getActivity(), idRes, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void showWaitingDialog(String msg) {
         //TODO:
+    }
+
+    @Override
+    public void showWaitingDialog(int idRes) {
+
     }
 
     @Override
@@ -27,5 +38,8 @@ public class SkeletonBaseFragment extends RoboFragment implements IBaseView {
         //TODO:
 
     }
+
+
+
 
 }
