@@ -19,7 +19,6 @@ public class ErrorBean implements IBaseBean{
         return code;
     }
 
-
     public String getDescription() {
         return description;
     }
