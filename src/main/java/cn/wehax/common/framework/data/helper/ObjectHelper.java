@@ -314,47 +314,60 @@ public class ObjectHelper {
             return false;
         }
         List<Field> toBeCreateField = ObjectHelper.findFieldListWithAnnotation(data.getClass(), ObjectFrom.class);
-        for (Field field : toBeCreateField) {
-            Class<?> clazz = field.getType();
-            if (IDataBean.class.isAssignableFrom(clazz)) {
-
-
-                Class<? extends IDataBean> dataClazz = (Class<? extends IDataBean>) clazz;
-                Dao subDao;
-                try {
-                    subDao = ormHelper.getDao(dataClazz);
-                } catch (SQLException e) {
-                    return false;
-                }
+        try {
+            for (Field field : toBeCreateField) {
                 field.setAccessible(true);
-                try {
-                    IDataBean dirtyData = (IDataBean) field.get(data);
-                    Field idField = ObjectHelper.findFieldWithAnnotation(clazz, Id.class);
-                    idField.setAccessible(true);
-                    Object id = idField.get(dirtyData);
-                    if (subDao.idExists(id)) {
-                        IDataBean dataInDb = (IDataBean) subDao.queryForId(id);
+                Object obj = field.get(data);
+                if (obj != null) {
 
-                        if (dataInDb.isComplete()) {
-                            //不用不完整的数据覆盖完整数据，不做操作。
-                        } else {
-                            //合并数据
-                            ObjectHelper.merge(dirtyData, dataInDb);
-                        }
-                        subDao.update(dataInDb);
-                    } else {
-                        subDao.create(dirtyData);
-                    }
-                    //新增到foreign-key对应的表。
-                } catch (SQLException e) {
-                    //如果已经存在，不处理
-                    return false;
-                } catch (IllegalAccessException e) {
-                    return false;
+                } else {
+                    continue;
                 }
-            }
+                Class<?> clazz = field.getType();
+                if (IDataBean.class.isAssignableFrom(clazz)) {
 
+
+                    Class<? extends IDataBean> dataClazz = (Class<? extends IDataBean>) clazz;
+                    Dao subDao;
+                    try {
+                        subDao = ormHelper.getDao(dataClazz);
+                    } catch (SQLException e) {
+                        return false;
+                    }
+                    field.setAccessible(true);
+                    try {
+                        IDataBean dirtyData = (IDataBean) field.get(data);
+                        Field idField = ObjectHelper.findFieldWithAnnotation(clazz, Id.class);
+                        idField.setAccessible(true);
+
+                        Object id = idField.get(dirtyData);
+                        if (subDao.idExists(id)) {
+                            IDataBean dataInDb = (IDataBean) subDao.queryForId(id);
+
+                            if (dataInDb.isComplete()) {
+                                //不用不完整的数据覆盖完整数据，不做操作。
+                            } else {
+                                //合并数据
+                                ObjectHelper.merge(dirtyData, dataInDb);
+                            }
+                            subDao.update(dataInDb);
+                        } else {
+                            subDao.create(dirtyData);
+                        }
+                        //新增到foreign-key对应的表。
+                    } catch (SQLException e) {
+                        //如果已经存在，不处理
+                        return false;
+                    } catch (IllegalAccessException e) {
+                        return false;
+                    }
+                }
+
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
+
         return true;
     }
 }
