@@ -8,14 +8,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -30,32 +31,32 @@ import cn.wehax.common.R;
  */
 public class ImageUtil {
 
-    public static String getLocalImagePath(Context context){
-        File file = new File(Environment.getExternalStorageDirectory()+"/android/data/"+context.getPackageName()+"/photo");
-        if(!file.exists()){
+    public static String getLocalImagePath(Context context) {
+        File file = new File(Environment.getExternalStorageDirectory() + "/android/data/" + context.getPackageName() + "/photo");
+        if (!file.exists()) {
             file.mkdirs();
         }
         return file.getPath();
     }
 
-    public static String getImageName(int index){
-        return "img_"+index+".png";
+    public static String getImageName(int index) {
+        return "img_" + index + ".png";
     }
 
-    public static void chooseImage(Activity activity,int requestCode){
-        chooseImage(activity,requestCode,false);
+    public static void chooseImage(Activity activity, int requestCode) {
+        chooseImage(activity, requestCode, false);
     }
 
-    public static void chooseImage(Activity activity,int requestCode,boolean isModifyImage){
+    public static void chooseImage(Activity activity, int requestCode, boolean isModifyImage) {
         Intent pickIntent = new Intent(Intent.ACTION_GET_CONTENT);
         pickIntent.setType("image/*");
-        if(isModifyImage) {
+        if (isModifyImage) {
             initModifyImageConfig(pickIntent);
         }
 
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(isModifyImage) {
+        if (isModifyImage) {
             initModifyImageConfig(takePhotoIntent);
         }
 
@@ -65,7 +66,7 @@ public class ImageUtil {
         activity.startActivityForResult(chooserIntent, requestCode);
     }
 
-    private static void initModifyImageConfig(final Intent intent){
+    private static void initModifyImageConfig(final Intent intent) {
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
@@ -74,7 +75,7 @@ public class ImageUtil {
         intent.putExtra("return-data", true);
     }
 
-    public static Bitmap  doImageFromPick(Activity activity,Intent data,String imagePath){
+    public static Bitmap doImageFromPick(Activity activity, Intent data, String imagePath) {
         ContentResolver resolver = activity.getContentResolver();
         Bitmap bitmap = null;
         try {
@@ -84,21 +85,21 @@ public class ImageUtil {
                 return null;
             }
             bitmap = ImageUtil.getSmallBitmap(mContent, 480, 800);
-            saveImage(bitmap,imagePath);
-        }catch (Exception e){
+            saveImage(bitmap, imagePath);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return bitmap;
     }
 
-    public static Bitmap  doImageFromCamera(Intent data,String imagePath){
+    public static Bitmap doImageFromCamera(Intent data, String imagePath) {
         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-        saveImage(bitmap,imagePath);
+        saveImage(bitmap, imagePath);
         return bitmap;
     }
 
-    private static void  saveImage(Bitmap bitmap ,String imagePath){
+    private static void saveImage(Bitmap bitmap, String imagePath) {
         FileOutputStream out = null;
         try {
             File file = new File(imagePath);
@@ -107,7 +108,7 @@ public class ImageUtil {
             }
 
             out = new FileOutputStream(file, false);
-            bitmap.compress(Bitmap.CompressFormat.PNG,100, out);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,7 +119,7 @@ public class ImageUtil {
                     out.close();
                     out = null;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -246,6 +247,31 @@ public class ImageUtil {
 
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
+    }
+
+
+    /**
+     * 根据原图生成圆形图，要求SDK 18，若低于18会有明显锯齿
+     *
+     * @param bitmap
+     * @return
+     */
+    public static Bitmap toOvalBitmap(Bitmap bitmap) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getHeight(), bitmap.getWidth(), Bitmap.Config.ARGB_4444);
+        Canvas canvas = new Canvas(output);
+        Paint paint = new Paint();
+        Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        RectF rectF = new RectF(rect);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG));
+        }
+        canvas.drawOval(rectF, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        paint.setAntiAlias(true);
+        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        paint.setFilterBitmap(true);
+        canvas.drawBitmap(bitmap, rect, rectF, paint);
         return output;
     }
 }

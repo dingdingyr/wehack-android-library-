@@ -238,7 +238,8 @@ public class ObjectHelper {
      * @return
      */
     public static <T extends IBaseBean> boolean copy(T from, T to) {
-        List<Field> fields = getAllFields(from.getClass());
+        assert (to.getClass().isAssignableFrom(from.getClass()));
+        List<Field> fields = getAllFields(to.getClass());
         try {
             for (Field field : fields) {
                 field.setAccessible(true);

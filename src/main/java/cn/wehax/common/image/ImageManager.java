@@ -14,8 +14,10 @@ import static cn.wehax.common.exception.Assertion.assertThat;
  * Created by dss on 2014/12/13
  */
 @Singleton
-public class ImageManager implements IImageManager{
+public class ImageManager implements IImageManager {
     private ImageLoader mImageLoader;
+
+    private CircleImageLoader mCircleImageLoader;
 
     @Inject
     private Application context;
@@ -23,6 +25,7 @@ public class ImageManager implements IImageManager{
     /**
      * 返回一个有效的ImageLoader
      * 注：该ImageLoader类来自于Volley库
+     *
      * @return
      */
     public ImageLoader getImageLoader() {
@@ -36,8 +39,15 @@ public class ImageManager implements IImageManager{
         return mImageLoader;
     }
 
+    public CircleImageLoader getmCircleImageLoader() {
+        if (mCircleImageLoader == null) {
+            assertThat(context != null);
+            ImageLoader.ImageCache imageCache = new LruMemoryCache();
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
+            mCircleImageLoader = new CircleImageLoader(requestQueue, imageCache);
+        }
 
-
-
+        return mCircleImageLoader;
+    }
 
 }
