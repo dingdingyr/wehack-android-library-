@@ -23,6 +23,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFile '/Users/mayuhan/workspace/android-main/android-paime/proguard-android.txt'
+        }
+        debug {
+            minifyEnabled false
+            proguardFile '/Users/mayuhan/workspace/android-main/android-paime/proguard-android.txt'
         }
     }
 
@@ -35,8 +40,5 @@ dependencies {
     compile 'org.roboguice:roboguice:3.0.1'
     compile 'com.mcxiaoke.volley:library:1.0.8'
     compile 'com.j256.ormlite:ormlite-android:4.46'
-
-
-
-//    compile 'com.android.support:appcompat-v7:21.0.0'
+    //    compile 'com.android.support:appcompat-v7:21.0.0'
 }
