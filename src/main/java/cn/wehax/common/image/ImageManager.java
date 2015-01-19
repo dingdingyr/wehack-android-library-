@@ -39,7 +39,7 @@ public class ImageManager implements IImageManager {
         return mImageLoader;
     }
 
-    public CircleImageLoader getmCircleImageLoader() {
+    public CircleImageLoader getCircleImageLoader() {
         if (mCircleImageLoader == null) {
             assertThat(context != null);
             ImageLoader.ImageCache imageCache = new LruMemoryCache();
