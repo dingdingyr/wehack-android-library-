@@ -11,7 +11,7 @@ public class UrlUtil {
     public static String assembleUrlByGet(String url, Map<String, String> params) {
         Iterator<Map.Entry<String, String>> iterator = params.entrySet().iterator();
         StringBuilder sb = new StringBuilder(url);
-        if (params.isEmpty()) {
+        if (!params.isEmpty()) {
             if (!url.contains("?")) {
                 sb.append("?");
             } else {
