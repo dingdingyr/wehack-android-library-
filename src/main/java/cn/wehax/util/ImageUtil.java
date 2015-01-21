@@ -270,10 +270,7 @@ public class ImageUtil {
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         canvas.drawOval(rectF, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-//        paint.setAntiAlias(true);
-//        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         paint.setFilterBitmap(true);
-
         canvas.drawBitmap(bitmap, rect, rectF, paint);
         return output;
     }
