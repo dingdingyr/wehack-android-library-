@@ -256,4 +256,14 @@ public class DeviceUtil {
             return false;
         }
     }
+
+    public static boolean isArm(){
+        if  (Build.CPU_ABI.contains("x86"))
+            return false;
+        if(Build.CPU_ABI2.contains("x86"))
+            return false;
+        return true;
+
+
+    }
 }

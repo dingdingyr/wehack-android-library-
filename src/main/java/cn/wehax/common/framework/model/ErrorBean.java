@@ -24,5 +24,11 @@ public class ErrorBean implements IBaseBean{
     }
 
 
-
+    @Override
+    public String toString() {
+        return "ErrorBean{" +
+                "code=" + code +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
