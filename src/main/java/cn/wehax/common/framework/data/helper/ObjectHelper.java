@@ -361,7 +361,10 @@ public class ObjectHelper {
                         return false;
                     } catch (IllegalAccessException e) {
                         return false;
+                    } catch (IllegalArgumentException e) {
+                        return false;
                     }
+
                 }
 
             }

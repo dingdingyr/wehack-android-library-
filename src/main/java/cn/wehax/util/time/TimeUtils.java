@@ -27,7 +27,8 @@ public class TimeUtils {
      */
     public static String getFormatTime(Long milliseconds, String pattern) {
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        return sdf.format(new Date(milliseconds.longValue()));
+
+        return sdf.format(new Date(milliseconds));
     }
 
     /**
