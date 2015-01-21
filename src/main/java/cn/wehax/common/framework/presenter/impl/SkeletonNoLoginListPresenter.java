@@ -71,7 +71,7 @@ public abstract class SkeletonNoLoginListPresenter<VI extends IListView, BB exte
     }
 
     public final void refreshPage() {
-        loadDataAtPage(DataStrategy.CACHE_POLICY_NETWORK_ELSE_CACHE, 1);
+        loadDataAtPage(DataStrategy.CACHE_POLICY_NETWORK_ONLY, 1);
     }
 
     protected final void refreshView() {
