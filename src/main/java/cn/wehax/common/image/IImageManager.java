@@ -11,5 +11,5 @@ public interface IImageManager {
      */
     public ImageLoader getImageLoader();
 
-
+    public CircleImageLoader getCircleImageLoader();
 }

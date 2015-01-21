@@ -30,7 +30,6 @@ public class ImageManager implements IImageManager {
      */
     public ImageLoader getImageLoader() {
         if (mImageLoader == null) {
-            assertThat(context != null);
             ImageLoader.ImageCache imageCache = new LruMemoryCache();
             RequestQueue requestQueue = Volley.newRequestQueue(context);
             mImageLoader = new ImageLoader(requestQueue, imageCache);
@@ -41,7 +40,6 @@ public class ImageManager implements IImageManager {
 
     public CircleImageLoader getCircleImageLoader() {
         if (mCircleImageLoader == null) {
-            assertThat(context != null);
             ImageLoader.ImageCache imageCache = new LruMemoryCache();
             RequestQueue requestQueue = Volley.newRequestQueue(context);
             mCircleImageLoader = new CircleImageLoader(requestQueue, imageCache);
