@@ -266,10 +266,12 @@ public class ImageUtil {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG));
         }
-        canvas.drawOval(rectF, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         paint.setAntiAlias(true);
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        canvas.drawOval(rectF, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+//        paint.setAntiAlias(true);
+//        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         paint.setFilterBitmap(true);
 
         canvas.drawBitmap(bitmap, rect, rectF, paint);
