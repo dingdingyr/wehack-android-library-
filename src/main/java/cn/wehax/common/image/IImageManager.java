@@ -16,6 +16,4 @@ public interface IImageManager {
      * @return
      */
     public ImageLoader getCircleImageLoader();
-
-
 }
