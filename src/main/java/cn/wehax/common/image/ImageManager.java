@@ -44,7 +44,6 @@ public class ImageManager implements IImageManager {
             RequestQueue requestQueue = Volley.newRequestQueue(context);
             mCircleImageLoader = new CircleImageLoader(requestQueue, imageCache);
         }
-
         return mCircleImageLoader;
     }
 

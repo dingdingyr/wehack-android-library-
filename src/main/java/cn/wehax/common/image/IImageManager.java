@@ -11,5 +11,9 @@ public interface IImageManager {
      */
     public ImageLoader getImageLoader();
 
-    public CircleImageLoader getCircleImageLoader();
+    /**
+     * 获取圆形图loader
+     * @return
+     */
+    public ImageLoader getCircleImageLoader();
 }

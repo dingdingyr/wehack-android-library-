@@ -9,15 +9,16 @@ import java.util.Map;
  */
 public class UrlUtil {
     public static String assembleUrlByGet(String url, Map<String, String> params) {
-        Iterator<Map.Entry<String, String>> iterator = params.entrySet().iterator();
+
         StringBuilder sb = new StringBuilder(url);
-        if (params.isEmpty()) {
+        if (params!=null && !params.isEmpty()) {
             if (!url.contains("?")) {
                 sb.append("?");
             } else {
                 sb.append('&');
             }
             int count = 0;
+            Iterator<Map.Entry<String, String>> iterator = params.entrySet().iterator();
             while (iterator.hasNext()) {
                 count++;
                 Map.Entry<String, String> entry = iterator.next();
