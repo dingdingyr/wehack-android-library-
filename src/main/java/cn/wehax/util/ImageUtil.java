@@ -271,6 +271,7 @@ public class ImageUtil {
         paint.setAntiAlias(true);
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         paint.setFilterBitmap(true);
+
         canvas.drawBitmap(bitmap, rect, rectF, paint);
         return output;
     }
