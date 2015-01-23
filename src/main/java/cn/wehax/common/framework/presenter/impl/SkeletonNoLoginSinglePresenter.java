@@ -43,7 +43,6 @@ public abstract class SkeletonNoLoginSinglePresenter<VI extends ISingleView, BB 
         loadSingleData(DataStrategy.CACHE_POLICY_NETWORK_ELSE_CACHE);
     }
 
-
     public abstract void loadSingleData(int strategy);
 
     protected abstract int getStartStrategy();
