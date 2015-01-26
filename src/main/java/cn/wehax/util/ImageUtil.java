@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.PorterDuff;
@@ -274,4 +275,25 @@ public class ImageUtil {
         canvas.drawBitmap(bitmap, rect, rectF, paint);
         return output;
     }
+
+    /**
+     * 缩放图片
+     *
+     * @param org
+     * @param scaleWidth  宽度缩放比例 (targetWidth/srcWidth,targetWidth=目标图片宽度，srcWidth=原始图片宽度）
+     * @param scaleHeight 高度缩放比例
+     * @return
+     */
+    public static Bitmap scaleImage(Bitmap org, float scaleWidth, float scaleHeight) {
+        if (org == null) {
+            return null;
+        }
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // TODO org手动释放？
+        return Bitmap.createBitmap(org, 0, 0, org.getWidth(), org.getHeight(), matrix, true);
+    }
+
 }

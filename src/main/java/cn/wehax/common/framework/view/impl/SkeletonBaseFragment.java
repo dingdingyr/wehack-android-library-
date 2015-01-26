@@ -38,8 +38,4 @@ public class SkeletonBaseFragment extends RoboFragment implements IBaseView {
         //TODO:
 
     }
-
-
-
-
 }
