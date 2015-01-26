@@ -44,6 +44,7 @@ public abstract class SkeletonNoLoginListPresenter<VI extends IListView, BB exte
 
     @Override
     public final void setView(VI view) {
+        super.setView(view);
         mView = view;
         mAdapter = new GenericAdapter<>(mData, render);
         view.setAdapter(mAdapter);

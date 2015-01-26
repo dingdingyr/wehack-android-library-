@@ -1,5 +1,6 @@
 package cn.wehax.common.framework.view.impl;
 
+import android.app.Activity;
 import android.widget.Toast;
 
 import cn.wehax.common.framework.view.IBaseView;
@@ -39,7 +40,8 @@ public class SkeletonBaseFragment extends RoboFragment implements IBaseView {
 
     }
 
-
-
-
+    @Override
+    public Activity getActivityContext() {
+        return getActivity();
+    }
 }
