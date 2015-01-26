@@ -12,5 +12,4 @@ public class DataStrategy {
     public static final int CACHE_POLICY_CACHE_ELSE_NETWORK = CACHE_POLICY_CACHE_THEN_NETWORK + 1; // 本地缓存优先（如果本地缓存数据存在直接使用本地缓存数据，否则使用远程）
     public static final int CACHE_POLICY_NETWORK_ELSE_CACHE = CACHE_POLICY_CACHE_ELSE_NETWORK + 1; // 远程优先（如果能够读取远程服务器数据直接使用远程服务器数据，否则使用本地缓存数据）
 
-    public static final int CACHE_POLICY_DEFAULT = CACHE_POLICY_CACHE_THEN_NETWORK;
 }
