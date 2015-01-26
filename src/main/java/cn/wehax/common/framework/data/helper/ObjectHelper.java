@@ -43,6 +43,10 @@ public class ObjectHelper {
             if (field.getType().equals(String.class)
                     || type.equalsIgnoreCase("String")) {
 
+                String str= srcJsonObj.optString(dataKey);
+                if(str.equals("null") || str.length()<=0){
+                    return;
+                }
                 field.set(obj, srcJsonObj.optString(dataKey));
 
             } else if (field.getType().equals(Integer.class)
