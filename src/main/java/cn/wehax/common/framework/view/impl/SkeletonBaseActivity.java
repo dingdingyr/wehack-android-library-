@@ -1,5 +1,6 @@
 package cn.wehax.common.framework.view.impl;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.widget.Toast;
 
@@ -34,11 +35,11 @@ public abstract class SkeletonBaseActivity extends RoboFragmentActivity implemen
     @Override
     public void showWaitingDialog(String msg) {
         //TODO:
-        if(mDialog == null){
-            mDialog = ProgressDialog.show(this,null, msg);
+        if (mDialog == null) {
+            mDialog = ProgressDialog.show(this, null, msg);
             mDialog.setCanceledOnTouchOutside(false);
             mDialog.setCancelable(false);
-        }else{
+        } else {
             mDialog.show();
         }
 
@@ -54,6 +55,8 @@ public abstract class SkeletonBaseActivity extends RoboFragmentActivity implemen
     }
 
 
-
-
+    @Override
+    public Activity getActivityContext() {
+        return this;
+    }
 }

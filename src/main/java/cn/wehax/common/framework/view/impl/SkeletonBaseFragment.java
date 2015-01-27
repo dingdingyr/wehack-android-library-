@@ -1,5 +1,6 @@
 package cn.wehax.common.framework.view.impl;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.widget.Toast;
 
@@ -50,5 +51,10 @@ public class SkeletonBaseFragment extends RoboFragment implements IBaseView {
             mDialog.dismiss();
         }
 
+    }
+
+    @Override
+    public Activity getActivityContext() {
+        return getActivity();
     }
 }

@@ -1,5 +1,8 @@
 package cn.wehax.common.framework.view;
 
+import android.app.Activity;
+import android.content.Context;
+
 /**
  * Created by Terry on 14/12/10.
  * mail: zhichangterry@gmail.com
@@ -17,5 +20,5 @@ public interface IBaseView {
 
     public void hideWaitingDialog();
 
-
+    public Activity getActivityContext();
 }
