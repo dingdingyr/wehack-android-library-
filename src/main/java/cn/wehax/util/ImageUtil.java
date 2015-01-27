@@ -118,7 +118,6 @@ public class ImageUtil {
                 if (out != null) {
                     out.flush();
                     out.close();
-                    out = null;
                 }
             } catch (Exception e) {
                 e.printStackTrace();

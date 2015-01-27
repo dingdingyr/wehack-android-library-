@@ -63,11 +63,11 @@ public class ImageManager implements IImageManager {
      * it will switch to either the actual image or the error image.
      * （2）根据指定的图片最大高宽，调整下载图片尺寸
      *
-     * @param view         The imageView that the listener is associated with.
+     * @param view              The imageView that the listener is associated with.
      * @param defaultImageResId Default image resource ID to use, or 0 if it doesn't exist.
      * @param errorImageResId   Error image resource ID to use, or 0 if it doesn't exist.
      */
-    public ImageLoader.ImageListener getImageListener(final ImageView view,final ImageView border,
+    public ImageLoader.ImageListener getImageListener(final ImageView view, final ImageView border,
                                                       final int defaultImageResId, final int errorImageResId, final int maxHeight, final int maxWidth) {
         return new ImageLoader.ImageListener() {
             @Override
@@ -149,6 +149,38 @@ public class ImageManager implements IImageManager {
     }
 
     /**
+     * 获取本地图片
+     * 先读缓存，后本地
+     *
+     * @param path 本地图片路径，同时也是获取缓存的键值
+     * @return
+     */
+    public Bitmap getLocalBitmap(String path) {
+        try {
+            // 如果已缓存直接返回缓存
+            Bitmap bmp = localBitmapCache.getBitmap(path);
+            if (bmp != null) {
+                return bmp;
+            }
+
+            // 未缓存，读取本地图片
+            bmp = readLocalBitmap(path);
+            if (bmp == null) {
+                return null;
+            }
+
+            // 缓存
+            localBitmapCache.putBitmap(path, bmp);
+
+            return bmp;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
      * 调整图片尺寸
      *
      * @param bmp
@@ -188,6 +220,7 @@ public class ImageManager implements IImageManager {
             scaleHeight /= bmpHeight;
         } else {
             // TODO 处理maxLength!=maxWidth情况
+
         }
 
         return ImageUtil.scaleImage(bmp, scaleWidth, scaleHeight);
