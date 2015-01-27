@@ -1,5 +1,6 @@
 package cn.wehax.common.framework.view.impl;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.widget.Toast;
 
@@ -54,4 +55,8 @@ public abstract class SkeletonBaseActivity extends RoboFragmentActivity implemen
     }
 
 
+    @Override
+    public Activity getActivityContext() {
+        return this;
+    }
 }

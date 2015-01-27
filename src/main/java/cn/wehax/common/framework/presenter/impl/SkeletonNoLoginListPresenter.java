@@ -26,7 +26,7 @@ public abstract class SkeletonNoLoginListPresenter<VI extends IListView, BB exte
 
     protected RD render;
 
-    protected int currentPage = 1;
+    protected int currentPage = 0;
     protected int totalPage = -1;
     protected boolean isFirstDataLoad;
 
@@ -44,6 +44,7 @@ public abstract class SkeletonNoLoginListPresenter<VI extends IListView, BB exte
 
     @Override
     public final void setView(VI view) {
+        super.setView(view);
         mView = view;
         mAdapter = new GenericAdapter<>(mData, render);
         view.setAdapter(mAdapter);

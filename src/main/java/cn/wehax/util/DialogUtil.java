@@ -30,6 +30,5 @@ public class DialogUtil {
                 .create();
         alertDialog.setCanceledOnTouchOutside(true);
         alertDialog.show();
-
     }
 }

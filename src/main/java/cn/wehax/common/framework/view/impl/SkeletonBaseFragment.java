@@ -1,5 +1,7 @@
 package cn.wehax.common.framework.view.impl;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.widget.Toast;
 
 import cn.wehax.common.framework.view.IBaseView;
@@ -11,6 +13,9 @@ import roboguice.fragment.RoboFragment;
  * QQ: 1090035354
  */
 public class SkeletonBaseFragment extends RoboFragment implements IBaseView {
+
+    private ProgressDialog mDialog;
+
     @Override
     final public void showErrorMessage(String err) {
         if (getActivity() != null && !getActivity().isFinishing())
@@ -26,6 +31,13 @@ public class SkeletonBaseFragment extends RoboFragment implements IBaseView {
     @Override
     public void showWaitingDialog(String msg) {
         //TODO:
+        if(mDialog == null){
+            mDialog = ProgressDialog.show(getActivity(), null, msg);
+            mDialog.setCanceledOnTouchOutside(false);
+            mDialog.setCancelable(false);
+        }else{
+            mDialog.show();
+        }
     }
 
     @Override
@@ -35,11 +47,14 @@ public class SkeletonBaseFragment extends RoboFragment implements IBaseView {
 
     @Override
     public void hideWaitingDialog() {
-        //TODO:
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
 
     }
 
-
-
-
+    @Override
+    public Activity getActivityContext() {
+        return getActivity();
+    }
 }
