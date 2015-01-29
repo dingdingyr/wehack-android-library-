@@ -100,7 +100,7 @@ public class ImageUtil {
         return bitmap;
     }
 
-    private static void saveImage(Bitmap bitmap, String imagePath) {
+    public static void saveImage(Bitmap bitmap, String imagePath) {
         FileOutputStream out = null;
         try {
             File file = new File(imagePath);
