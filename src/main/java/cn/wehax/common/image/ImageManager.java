@@ -3,10 +3,8 @@ package cn.wehax.common.image;
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.view.ViewGroup;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
@@ -40,7 +38,7 @@ public class ImageManager implements IImageManager {
      */
     public ImageLoader getImageLoader() {
         if (mImageLoader == null) {
-            ImageLoader.ImageCache imageCache = new LruMemoryCache();
+            ImageLoader.ImageCache imageCache = localBitmapCache;
             RequestQueue requestQueue = Volley.newRequestQueue(context);
             mImageLoader = new ImageLoader(requestQueue, imageCache);
         }
@@ -50,11 +48,22 @@ public class ImageManager implements IImageManager {
 
     public CircleImageLoader getCircleImageLoader() {
         if (mCircleImageLoader == null) {
-            ImageLoader.ImageCache imageCache = new LruMemoryCache();
+            ImageLoader.ImageCache imageCache = localBitmapCache;
             RequestQueue requestQueue = Volley.newRequestQueue(context);
             mCircleImageLoader = new CircleImageLoader(requestQueue, imageCache);
         }
         return mCircleImageLoader;
+    }
+
+
+    public int clearImageCache() {
+        int clearSize = localBitmapCache.size;
+        localBitmapCache.clear();
+        return clearSize / 1024;
+    }
+
+    public int getImageCacheSize() {
+        return localBitmapCache.size/1024;
     }
 
     /**
