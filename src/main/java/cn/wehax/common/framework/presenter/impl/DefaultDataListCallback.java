@@ -19,6 +19,8 @@ public class DefaultDataListCallback<BB extends IBaseBean> implements IDataListC
         mPresenter = presenter;
     }
 
+
+
     @Override
     public void onDataListReturn(List<BB> dataList, int currentPage, int totalPage) {
         mPresenter.currentPage = currentPage;
