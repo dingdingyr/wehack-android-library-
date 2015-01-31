@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 
 import cn.wehax.common.R;
+import cn.wehax.common.widget.ConfirmDialog;
 
 
 /**
@@ -21,14 +22,25 @@ public class DialogUtil {
         alertDialog.show();
     }
 
-    public static void showConfirmDialog(Context context, String title, String msg, DialogInterface.OnClickListener positive, DialogInterface.OnClickListener negative) {
-        Dialog alertDialog = new AlertDialog.Builder(context)
-                .setTitle(title)
-                .setMessage(msg)
-                .setPositiveButton(R.string.confirm, positive)
-                .setNegativeButton(R.string.cancel, negative)
-                .create();
-        alertDialog.setCanceledOnTouchOutside(true);
-        alertDialog.show();
+    public static void showConfirmDialog(final Context context,
+                                         String title,
+                                         String msg,
+                                         DialogInterface.OnClickListener positive,
+                                         DialogInterface.OnClickListener negative) {
+
+        ConfirmDialog dialog = new ConfirmDialog(context, R.style.filter_dialog_style);
+        dialog.setTitle(title);
+        dialog.setMsg(msg);
+        dialog.setPositiveListener(positive);
+        dialog.setNegativeListener(negative);
+        dialog.show();
+    }
+
+    public static void showConfirmDialog(Context context,
+                                         int titleRes,
+                                         int msgRes,
+                                         DialogInterface.OnClickListener positive,
+                                         DialogInterface.OnClickListener negative) {
+        showConfirmDialog(context, context.getString(titleRes), context.getString(msgRes), positive, negative);
     }
 }

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="280dp"
+    android:background="@drawable/shape_dialog_bg">
+
+    <TextView
+        android:id="@+id/confirm_dialog_title"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:textSize="16sp"
+        android:text="Title"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:text="Msg"
+        android:padding="10dp"
+        android:id="@+id/confirm_dialog_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/negative_btn"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_confirm_dialog_btn"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/cancel"
+            android:textColor="@drawable/selector_confirm_btn_text_color"
+            android:layout_marginRight="5dp" />
+
+        <Button
+            android:id="@+id/positive_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_confirm_dialog_btn"
+            android:textColor="@drawable/selector_confirm_btn_text_color"
+            android:text="@string/confirm"
+            android:padding="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+</LinearLayout>
