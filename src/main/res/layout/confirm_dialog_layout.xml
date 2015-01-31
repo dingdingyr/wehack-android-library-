@@ -11,14 +11,14 @@
         android:layout_width="match_parent"
         android:padding="10dp"
         android:textSize="16sp"
-        android:text="Title"
+        android:textColor="@color/dark_text_gray"
         android:layout_height="50dp" />
 
     <TextView
-        android:text="Msg"
         android:padding="10dp"
         android:id="@+id/confirm_dialog_msg"
         android:layout_width="match_parent"
+        android:textColor="@color/dark_text_gray_2"
         android:layout_height="wrap_content" />
 
     <LinearLayout
@@ -31,7 +31,7 @@
             android:id="@+id/negative_btn"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@drawable/selector_confirm_dialog_btn"
+            android:background="@drawable/selector_dialog_cancel_btn"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="@string/cancel"
@@ -42,8 +42,8 @@
             android:id="@+id/positive_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/selector_confirm_dialog_btn"
-            android:textColor="@drawable/selector_confirm_btn_text_color"
+            android:background="@drawable/selector_dialog_ok_btn"
+            android:textColor="@color/white"
             android:text="@string/confirm"
             android:padding="10dp"
             android:layout_marginLeft="5dp"
