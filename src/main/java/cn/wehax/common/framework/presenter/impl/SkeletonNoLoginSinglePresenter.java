@@ -39,7 +39,7 @@ public abstract class SkeletonNoLoginSinglePresenter<VI extends ISingleView, BB 
     }
 
     @Override
-    public final void refreshPage() {
+    public final void refreshData() {
         loadSingleData(DataStrategy.CACHE_POLICY_NETWORK_ELSE_CACHE);
     }
 

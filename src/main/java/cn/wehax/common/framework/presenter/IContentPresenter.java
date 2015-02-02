@@ -12,7 +12,7 @@ public interface IContentPresenter<T extends IContentView, BB extends IBaseBean>
 
     void startLoadPage(String... params);
 
-    void refreshPage();
+    void refreshData();
 
 
 }

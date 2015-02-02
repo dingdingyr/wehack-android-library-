@@ -3,6 +3,7 @@ package cn.wehax.common.framework.presenter.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.wehax.common.R;
 import cn.wehax.common.framework.adapter.GenericAdapter;
 import cn.wehax.common.framework.adapter.IRenderer;
 import cn.wehax.common.framework.data.DataStrategy;
@@ -27,7 +28,7 @@ public abstract class SkeletonNoLoginListPresenter<VI extends IListView, BB exte
     protected RD render;
 
     protected int currentPage = 0;
-    protected int totalPage = -1;
+    protected boolean isLastPage = false;
     protected boolean isFirstDataLoad;
 
     public SkeletonNoLoginListPresenter(Class<RD> clazz) {
@@ -71,8 +72,25 @@ public abstract class SkeletonNoLoginListPresenter<VI extends IListView, BB exte
         loadDataAtPage(getStartStrategy(), 1);
     }
 
-    public final void refreshPage() {
-        loadDataAtPage(DataStrategy.CACHE_POLICY_NETWORK_ONLY, 1);
+    /**
+     * 刷新数据
+     */
+    public void refreshData() {
+        currentPage = 1;
+        isLastPage = false;
+        loadDataAtPage(DataStrategy.CACHE_POLICY_NETWORK_ONLY, currentPage);
+    }
+
+    /**
+     * 加载更多
+     */
+    public void loadMoreData(){
+        if(isLastPage){
+            mView.showErrorMessage(R.string.tips_last_page);
+            mView.onRefreshComplete();
+        }else{
+            loadDataAtPage(DataStrategy.CACHE_POLICY_NETWORK_ONLY,currentPage + 1);
+        }
     }
 
     protected final void refreshView() {

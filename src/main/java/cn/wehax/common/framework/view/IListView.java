@@ -9,4 +9,5 @@ import android.widget.BaseAdapter;
  */
 public interface IListView extends IContentView {
     void setAdapter(BaseAdapter adapter);
+    void onRefreshComplete();
 }

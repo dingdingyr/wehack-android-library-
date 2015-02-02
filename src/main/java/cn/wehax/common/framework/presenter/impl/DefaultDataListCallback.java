@@ -22,9 +22,8 @@ public class DefaultDataListCallback<BB extends IBaseBean> implements IDataListC
 
 
     @Override
-    public void onDataListReturn(List<BB> dataList, int currentPage, int totalPage) {
+    public void onDataListReturn(List<BB> dataList, int currentPage, int pageCount) {
         mPresenter.currentPage = currentPage;
-        mPresenter.totalPage = totalPage;
 
         //如果请求是第一页清除列表
         if (currentPage == 1) {
@@ -38,6 +37,8 @@ public class DefaultDataListCallback<BB extends IBaseBean> implements IDataListC
         }else{
             mPresenter.afterLaterDataLoaded(dataList);
         }
+
+
         mPresenter.refreshView();
     }
 
