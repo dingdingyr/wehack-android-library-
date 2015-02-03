@@ -32,7 +32,17 @@ public class DialogUtil {
         dialog.setTitle(title);
         dialog.setMsg(msg);
         dialog.setPositiveListener(positive);
-        dialog.setNegativeListener(negative);
+        if(negative == null){
+            dialog.setNegativeListener(new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+        }else{
+            dialog.setNegativeListener(negative);
+        }
+
         dialog.show();
     }
 
