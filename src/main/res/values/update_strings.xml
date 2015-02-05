@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="download_complete">下载完成</string>
+    <string name="dowload_complete_click_to_setup">下载完成,点击安装</string>
+    <string name="disconnect_download_failed">网络连接不正常，下载失败！</string>
+    <string name="disconnect_load_failed">网络连接不正常，加载失败！</string>
+    <string name="update_dialog_title">发现新版本</string>
+    <string name="update_dialog_message">发现新版本，点击确定更新</string>
+    <string name="update_db_dialog_title">数据库有更新</string>
+    <string name="update_db_dialog_message">数据库有更新，点击确定更新</string>
+    <string name="update_dialog_ok">确定</string>
+    <string name="update_dialog_cancel">取消</string>
+    <string name="update_tips_apk_newest">版本已经最新</string>
+    <string name="update_tips_db_newest">数据已经最新</string>
+    <string name="updating">正在更新</string>
+    <string name="downloading">正在下载</string>
+
+    <string name="force_update_dialog_title">版本更新</string>
+    <string name="force_update_dialog_message">当前版本过旧，导致部分功能无法使用，请立即更新</string>
+    <string name="force_update_dialog_ok">更新</string>
+    <string name="force_update_dialog_exit">退出应用</string>
+
+    <string name="sdcard_not_exist">没有检测到SD卡，请检查是否插好</string>
+</resources>
