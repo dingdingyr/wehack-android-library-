@@ -57,4 +57,6 @@ public class SkeletonBaseFragment extends RoboFragment implements IBaseView {
     public Activity getActivityContext() {
         return getActivity();
     }
+
+
 }

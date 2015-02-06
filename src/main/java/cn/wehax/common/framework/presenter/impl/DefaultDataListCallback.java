@@ -38,7 +38,6 @@ public class DefaultDataListCallback<BB extends IBaseBean> implements IDataListC
             mPresenter.afterLaterDataLoaded(dataList);
         }
 
-
         mPresenter.refreshView();
     }
 

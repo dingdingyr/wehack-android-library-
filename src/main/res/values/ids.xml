@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="load_view_content" />
+    <item type="id" name="load_view_loading" />
+    <item type="id" name="load_view_reload" />
+    <item type="id" name="load_view_empty" />
+</resources>
