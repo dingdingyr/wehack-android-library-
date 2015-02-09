@@ -62,7 +62,7 @@ public abstract class SkeletonNoLoginListPresenter<VI extends IListView, BB exte
     }
 
     protected void afterLaterDataLoaded(List<BB> data) {
-
+        mView.showContentView();
     }
 
 
