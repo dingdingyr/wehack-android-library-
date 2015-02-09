@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
+
 import cn.wehax.common.framework.view.IBaseView;
 import roboguice.activity.RoboFragmentActivity;
 
@@ -54,6 +56,17 @@ public abstract class SkeletonBaseActivity extends RoboFragmentActivity implemen
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     @Override
     public Activity getActivityContext() {

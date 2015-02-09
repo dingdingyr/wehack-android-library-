@@ -35,7 +35,7 @@ import android.content.SharedPreferences;
  */
 public class PreferencesUtils {
 
-	private static String preferenceName;
+	private static String preferenceName = "paime_preference";
 
 	public static void setPreferenceName(String name) {
 		preferenceName = name;
