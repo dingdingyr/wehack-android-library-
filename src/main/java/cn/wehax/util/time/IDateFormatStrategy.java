@@ -5,8 +5,8 @@ public interface IDateFormatStrategy {
     /**
      * 格式化日期
      *
-     * @param millisecond 日期
+     * @param millisecond 日期对应
      * @return
      */
-	String formatTime(long millisecond);
+	String formatDate(long millisecond);
 }

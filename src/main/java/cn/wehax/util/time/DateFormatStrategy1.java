@@ -11,7 +11,7 @@ public class DateFormatStrategy1 implements IDateFormatStrategy{
 	public static final String DATE_FORMAT_YESTERDAY = "昨日 HH:mm"; // 日期是昨日的日期格式
 	public static final String DATE_FORMAT_BEFORE_YESTERDAY = "yyyy/MM/dd HH:mm"; // 日期是昨日之前的日期格式
 	
-	public String formatTime(long millisecond){	
+	public String formatDate(long millisecond){
 		String formatTime;
 	
 		int difInDay = TimeUtils.getDateDifference(System.currentTimeMillis(), millisecond);

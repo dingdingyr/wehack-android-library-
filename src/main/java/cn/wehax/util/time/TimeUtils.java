@@ -8,43 +8,10 @@ import java.util.Date;
  * 时间相关辅助工具
  */
 public class TimeUtils {
-    public static final long MILLIS_IN_A_DAY = 24 * 60 * 60 * 1000; // 一天的毫秒数
-
-    public static final String PATTERN_Y_SLASH_M_SLASH_D_H_COMMA_M = "yyyy/MM/dd HH:mm";
-    public static final String PATTERN_Y_SLASH_M_SLASH_D = "yyyy/MM/dd";
-    public static final String PATTERN_Y_DASH_M_DASH_D = "yyyy-MM-dd";
-    public static final String PATTERN_D_SLASH_M_SLASH_Y = "dd/MM/yyyy";
-
     /**
-     * 获取格式化时间
+     * 一天的毫秒数
      */
-    public static String getFormatTime(String milliseconds, String pattern) {
-        return getFormatTime(Long.valueOf(milliseconds), pattern);
-    }
-
-    /**
-     * 获取格式化时间
-     */
-    public static String getFormatTime(Long milliseconds, String pattern) {
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-
-        return sdf.format(new Date(milliseconds));
-    }
-
-    /**
-     * 获取格式化时间
-     *
-     * @param milliseconds
-     * @param strategy 格式化策略
-     * @return
-     */
-    public static String getFormatTime(long milliseconds, IDateFormatStrategy strategy) {
-        if(strategy == null)
-            return null;
-
-        return strategy.formatTime(milliseconds);
-    }
-
+    public static final long MILLIS_IN_A_DAY = 24 * 60 * 60 * 1000;
     /**
      * 1h=3600s
      */
@@ -58,11 +25,43 @@ public class TimeUtils {
      */
     private final static int MINUTE_IN_HOUR = 60;
 
+    // 若干日期格式化样式
+    public static final String PATTERN_Y_SLASH_M_SLASH_D_H_COMMA_M = "yyyy/MM/dd HH:mm";
+    public static final String PATTERN_Y_SLASH_M_SLASH_D = "yyyy/MM/dd";
+    public static final String PATTERN_Y_DASH_M_DASH_D = "yyyy-MM-dd";
+    public static final String PATTERN_D_SLASH_M_SLASH_Y = "dd/MM/yyyy";
+
+    /**
+     * 获取格式化日期
+     */
+    public static String getFormatDate(Long milliseconds, String pattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+
+        return sdf.format(new Date(milliseconds));
+    }
+
+    public static String getFormatDate(String milliseconds, String pattern) {
+        return getFormatDate(Long.valueOf(milliseconds), pattern);
+    }
+
+    /**
+     * 获取格式化时间
+     *
+     * @param milliseconds 日期
+     * @param strategy     格式化策略
+     * @return
+     */
+    public static String getFormatDate(long milliseconds, IDateFormatStrategy strategy) {
+        if (strategy == null)
+            return null;
+
+        return strategy.formatDate(milliseconds);
+    }
+
     /**
      * 格式化视频录制时间（时间格式：hh:mm:ss'）
      *
      * @param seconds 视频录制时间（单位秒）
-     *
      * @return
      */
     public static String getFormatRecordTime(long seconds) {
@@ -75,25 +74,57 @@ public class TimeUtils {
                 + (ss == 0 ? "" : (ss < 10 ? "0" + ss : ss) + "'");
     }
 
+    /**
+     * 格式化倒计时时间（时间格式：hh:mm:ss'）
+     *
+     * @param milliseconds 倒计时时间（单位毫秒）
+     * @return
+     */
+    public static String getFormatCountDownTime(long milliseconds) {
+        if (milliseconds < 0) {
+            milliseconds = 0;
+        }
+
+        long seconds = milliseconds / 1000;
+        long hh = seconds / SECOND_IN_HOUR;
+        long mm = seconds % SECOND_IN_HOUR;
+        long ss = mm % SECOND_IN_MINUTE;
+        mm = mm / SECOND_IN_MINUTE;
+
+        String time;
+        if (hh > 0) {
+            time = String.format("%02ld : %02ld : %02ld", hh, mm, ss);
+        } else if (mm > 0) {
+            time = String.format("%02ld : %02ld", mm, ss);
+        } else {
+            time = String.format("%02ld", ss);
+        }
+
+        return time;
+    }
 
     /**
-     * 计算两个日期之间相差多少天
+     * 计算两个日期之间相差天数
+     *
+     * @param millis1 日期1
+     * @param millis2 日期2
+     * @return
      */
-    public static int getDateDifference(long millis1, long millis2){
+    public static int getDateDifference(long millis1, long millis2) {
         long millisFormer;
         long millisLatter;
 
         // 保证millisFormer保存大时间，millisLatter保存小时间
-        if(millis1 >= millis2){
+        if (millis1 >= millis2) {
             millisFormer = millis1;
             millisLatter = millis2;
-        }else{
+        } else {
             millisFormer = millis2;
             millisLatter = millis1;
         }
 
     	/*
-    	 *  因为昨天与今天两个日期之间可能相差几秒，可能相差几十小时
+         *  因为昨天与今天两个日期之间可能相差几秒，可能相差几十小时
     	 *  比如：2014/12/25 23:59:50 和  2014/12/26 00:00:01
     	 *  比如：2014/12/25 00:00:01 和  2014/12/26 23:59:50
     	 *  因此，由日期生成的Calendar对象必须将时、分、秒参数清0，否则将影响最终计算结果
@@ -111,22 +142,19 @@ public class TimeUtils {
         calLatter.set(Calendar.SECOND, 0);
 
         // 计算两个日期相差天数
-        return (int)((calFormer.getTimeInMillis() - calLatter.getTimeInMillis()) / TimeUtils.MILLIS_IN_A_DAY);
+        return (int) ((calFormer.getTimeInMillis() - calLatter.getTimeInMillis()) / TimeUtils.MILLIS_IN_A_DAY);
     }
 
     /**
-     * 判断指定日期是星期几
+     * 计算指定日期是星期几
      *
-     * @param timeMillis 设置的需要判断的时间（毫秒格式）
-     *                   <p/>
-     *                   示例：getWeek(System.currentTimeMillis())
+     * @param milliseconds 日期
      */
-    public static String getWeek(long timeMillis) {
-
+    public static String getWeek(long milliseconds) {
         String Week = "星期";
 
         Calendar c = Calendar.getInstance();
-        c.setTime(new Date(timeMillis));
+        c.setTime(new Date(milliseconds));
 
         if (c.get(Calendar.DAY_OF_WEEK) == 1) {
             Week += "天";
