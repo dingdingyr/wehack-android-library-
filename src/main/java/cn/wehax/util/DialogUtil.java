@@ -26,7 +26,7 @@ public class DialogUtil {
                                          String title,
                                          String msg,
                                          DialogInterface.OnClickListener positive,
-                                         DialogInterface.OnClickListener negative,boolean cancelled) {
+                                         DialogInterface.OnClickListener negative, boolean cancelled) {
 
         ConfirmDialog dialog = new ConfirmDialog(context, R.style.filter_dialog_style);
         dialog.setTitle(title);
@@ -34,14 +34,14 @@ public class DialogUtil {
         dialog.setPositiveListener(positive);
         dialog.setCanceledOnTouchOutside(cancelled);
         dialog.setCancelable(cancelled);
-        if(negative == null){
+        if (negative == null) {
             dialog.setNegativeListener(new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
                 }
             });
-        }else{
+        } else {
             dialog.setNegativeListener(negative);
         }
 
@@ -52,7 +52,9 @@ public class DialogUtil {
                                          int titleRes,
                                          int msgRes,
                                          DialogInterface.OnClickListener positive,
-                                         DialogInterface.OnClickListener negative,boolean cancelled) {
-        showConfirmDialog(context, context.getString(titleRes), context.getString(msgRes), positive, negative,cancelled);
+                                         DialogInterface.OnClickListener negative, boolean cancelled) {
+        showConfirmDialog(context, context.getString(titleRes), context.getString(msgRes), positive, negative, cancelled);
     }
+
+
 }

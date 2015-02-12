@@ -2,6 +2,8 @@ package cn.wehax.common.framework.view.impl;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.view.MotionEvent;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
@@ -45,6 +47,19 @@ public abstract class SkeletonBaseActivity extends RoboFragmentActivity implemen
             mDialog.show();
         }
 
+    }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        try {
+            InputMethodManager im = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+            im.hideSoftInputFromWindow(getCurrentFocus().getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return super.onTouchEvent(event);
+        }
     }
 
     @Override
