@@ -93,11 +93,11 @@ public class TimeUtils {
 
         String time;
         if (hh > 0) {
-            time = String.format("%02ld : %02ld : %02ld", hh, mm, ss);
+            time = String.format("%02d:%02d:%02d", hh, mm, ss);
         } else if (mm > 0) {
-            time = String.format("%02ld : %02ld", mm, ss);
+            time = String.format("%02d:%02d", mm, ss);
         } else {
-            time = String.format("%02ld", ss);
+            time = String.format("%02d", ss);
         }
 
         return time;
