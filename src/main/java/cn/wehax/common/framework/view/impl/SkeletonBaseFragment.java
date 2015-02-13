@@ -31,11 +31,11 @@ public class SkeletonBaseFragment extends RoboFragment implements IBaseView {
     @Override
     public void showWaitingDialog(String msg) {
         //TODO:
-        if(mDialog == null){
+        if (mDialog == null) {
             mDialog = ProgressDialog.show(getActivity(), null, msg);
             mDialog.setCanceledOnTouchOutside(false);
             mDialog.setCancelable(false);
-        }else{
+        } else {
             mDialog.show();
         }
     }
