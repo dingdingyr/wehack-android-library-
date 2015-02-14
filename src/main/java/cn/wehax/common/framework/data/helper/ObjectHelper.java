@@ -313,6 +313,7 @@ public class ObjectHelper {
 
     public static <T extends IDataBean> boolean persistSelfAndForeignToDB(T data, Dao<T, Object> dao, OrmLiteSqliteOpenHelper ormHelper) {
         try {
+            data.setComplete(true);
             dao.createOrUpdate(data);
         } catch (SQLException e) {
             e.printStackTrace();
