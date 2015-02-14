@@ -1,9 +1,9 @@
 package cn.wehax.common.framework.presenter.impl;
 
 import cn.wehax.common.framework.data.DataStrategy;
+import cn.wehax.common.framework.model.IBaseBean;
 import cn.wehax.common.framework.presenter.IContentPresenter;
 import cn.wehax.common.framework.view.ISingleView;
-import cn.wehax.common.framework.model.IBaseBean;
 
 /**
  * Created by Terry on 14/12/19.

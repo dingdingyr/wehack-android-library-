@@ -2,21 +2,22 @@ package cn.wehax.common.layout;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.RelativeLayout;
+
+import com.android.volley.toolbox.NetworkImageView;
 
 /**
- * Created by mayuhan on 14/12/24.
+ * Created by mayuhan on 15/2/14.
  */
-public class SquareItemLayout extends RelativeLayout {
-    public SquareItemLayout(Context context) {
+public class FitWidthNetWorkImageView extends NetworkImageView {
+    public FitWidthNetWorkImageView(Context context) {
         super(context);
     }
 
-    public SquareItemLayout(Context context, AttributeSet attrs) {
+    public FitWidthNetWorkImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SquareItemLayout(Context context, AttributeSet attrs, int defStyle) {
+    public FitWidthNetWorkImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
@@ -32,8 +33,7 @@ public class SquareItemLayout extends RelativeLayout {
         // Children are just made to fill our space.
         int childWidthSize = getMeasuredWidth();
         int childHeightSize = getMeasuredHeight();
-        //高度和宽度一样
-        heightMeasureSpec = widthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidthSize, MeasureSpec.EXACTLY);
+        widthMeasureSpec = heightMeasureSpec = MeasureSpec.makeMeasureSpec(childHeightSize, MeasureSpec.EXACTLY);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 }
