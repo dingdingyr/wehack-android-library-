@@ -40,6 +40,10 @@ public class ImageUtil {
         return file.getPath();
     }
 
+    public static String getImageName(String name){
+        return "img_" + name + ".png";
+    }
+
     public static String getImageName(int index) {
         return "img_" + index + ".png";
     }
