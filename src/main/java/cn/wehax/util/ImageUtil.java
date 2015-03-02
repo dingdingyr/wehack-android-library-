@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,7 +18,9 @@ import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -80,16 +83,26 @@ public class ImageUtil {
         intent.putExtra("return-data", true);
     }
 
-    public static Bitmap doImageFromPick(Activity activity, Intent data, String imagePath) {
-        ContentResolver resolver = activity.getContentResolver();
+    /**
+     * 处理从相册获取的图片
+     * @param activity
+     * @param uri
+     * @param imagePath
+     * @return
+     */
+    public static Bitmap doImageFromPick(Activity activity, Uri uri, String imagePath) {
+
         Bitmap bitmap = null;
+
         try {
-            Uri uri = data.getData();
-            byte[] mContent = readStream(resolver.openInputStream(Uri.parse(uri.toString())));
-            if (mContent == null) {
+
+            byte[] array = getImageByteArrayFromUri(activity,uri);
+
+            if (array == null) {
                 return null;
             }
-            bitmap = ImageUtil.getSmallBitmap(mContent, 480, 800);
+            bitmap = convertBitmapFromByteArray(array, 480, 800);
+
             saveImage(bitmap, imagePath);
         } catch (Exception e) {
             e.printStackTrace();
@@ -98,6 +111,142 @@ public class ImageUtil {
         return bitmap;
     }
 
+
+    /**
+     * 通过Uri获取图片真实路径
+     * @param activity
+     * @param uri
+     * @param dir
+     * @return
+     */
+    public static String getImagePathFromUri(Activity activity,Uri uri,String dir) {
+        String path = "";
+
+        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+
+        try {
+
+            if (isKitKat && DocumentsContract.isDocumentUri(activity, uri)) {
+                path = getImagePathFromUriInHeightApi(activity, uri);
+            } else {
+                path = getImagePathFromUriInLowApi(activity, uri);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(TextUtils.isEmpty(path)){
+            path = createImagePathBySave(activity,uri,dir);
+        }
+        return path;
+    }
+
+    private static String getImagePathFromUriInHeightApi(Activity activity,Uri uri)
+            throws Exception{
+        String path = null;
+        String wholeID = DocumentsContract.getDocumentId(uri);
+
+        String id = wholeID.split(":")[1];
+
+        String[] column = { MediaStore.Images.Media.DATA };
+
+        String sel = MediaStore.Images.Media._ID + "=?";
+
+        Cursor cursor = activity.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, column, sel,
+                new String[] { id }, null);
+
+        int columnIndex = cursor.getColumnIndex(column[0]);
+
+        if (cursor.moveToFirst()) {
+            path = cursor.getString(columnIndex);
+        }
+
+        cursor.close();
+
+        return path;
+    }
+
+    private static String getImagePathFromUriInLowApi(Activity activity,Uri uri)
+            throws Exception{
+
+        Cursor cursor = null;
+        String path = null;
+        try {
+            String[] projection = {MediaStore.Images.Media.DATA};
+
+            cursor = activity.getContentResolver().query(uri,
+                    projection, null, null, null);
+
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+
+            cursor.moveToFirst();
+
+            path = cursor.getString(column_index);
+        }finally {
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return path;
+    }
+
+    /**
+     * 另存一份uri所指向的图片，并返回新图片路径
+     * @param activity
+     * @param uri 
+     * @param dir 需要另存的图片所在目录，不含图片名称
+     * @return
+     */
+    private static String createImagePathBySave(Activity activity,Uri uri,String dir){
+        try{
+
+            byte[] array = getImageByteArrayFromUri(activity,uri);
+
+            if (array == null) {
+                return null;
+            }
+            Bitmap bitmap = convertBitmapFromByteArray(array, 480, 800);
+
+            if(bitmap != null){
+                //通过图片MD5值来区分,避免重复保存图片
+                String md5 = MD5Util.getFileMD5String(array);
+
+                StringBuffer path = new StringBuffer(dir);
+                path.append("/");
+                path.append(md5);
+                path.append(".png");
+
+                saveImage(bitmap,path.toString());
+
+                bitmap.recycle();
+
+                return path.toString();
+            }
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static byte[] getImageByteArrayFromUri(Activity activity,Uri uri) throws Exception{
+
+        ContentResolver resolver = activity.getContentResolver();
+
+        return readByteArryFromStream(resolver.openInputStream(Uri.parse(uri.toString())));
+    }
+
+
+    /**
+     * 处理充相机获取的图片
+     * @param data
+     * @param imagePath
+     * @return
+     */
     public static Bitmap doImageFromCamera(Intent data, String imagePath) {
         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
         saveImage(bitmap, imagePath);
@@ -106,6 +255,7 @@ public class ImageUtil {
 
     public static void saveImage(Bitmap bitmap, String imagePath) {
         FileOutputStream out = null;
+
         try {
             File file = new File(imagePath);
             if (file.exists()) {
@@ -140,7 +290,7 @@ public class ImageUtil {
     }
 
 
-    public static byte[] readStream(InputStream inStream) throws Exception {
+    public static byte[] readByteArryFromStream(InputStream inStream) throws Exception {
         byte[] buffer = new byte[1024];
         int len = -1;
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
@@ -159,7 +309,7 @@ public class ImageUtil {
      *
      * @return
      */
-    public static Bitmap getSmallBitmap(byte[] bytes, int reqWidth, int reqHeight) {
+    public static Bitmap convertBitmapFromByteArray(byte[] bytes, int reqWidth, int reqHeight) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
