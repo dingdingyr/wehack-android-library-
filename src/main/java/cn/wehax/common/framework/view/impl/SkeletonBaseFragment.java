@@ -58,5 +58,13 @@ public class SkeletonBaseFragment extends RoboFragment implements IBaseView {
         return getActivity();
     }
 
+    @Override
+    public boolean isActivityAlive() {
+        if(getActivity() == null || getActivity().isFinishing()) {
+            return false;
+        }
+        return true;
+    }
+
 
 }

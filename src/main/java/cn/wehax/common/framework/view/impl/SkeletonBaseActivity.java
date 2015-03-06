@@ -87,4 +87,12 @@ public abstract class SkeletonBaseActivity extends RoboFragmentActivity implemen
     public Activity getActivityContext() {
         return this;
     }
+
+    @Override
+    public boolean isActivityAlive() {
+        if(this.isFinishing()) {
+            return false;
+        }
+        return true;
+    }
 }

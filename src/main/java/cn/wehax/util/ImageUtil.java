@@ -263,7 +263,7 @@ public class ImageUtil {
             }
 
             out = new FileOutputStream(file, false);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, out);
 
         } catch (Exception e) {
             e.printStackTrace();

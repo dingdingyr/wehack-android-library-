@@ -21,4 +21,6 @@ public interface IBaseView {
     public void hideWaitingDialog();
 
     public Activity getActivityContext();
+
+    public boolean isActivityAlive();
 }
