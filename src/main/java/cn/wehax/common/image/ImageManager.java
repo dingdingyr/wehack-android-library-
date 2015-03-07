@@ -27,6 +27,8 @@ public class ImageManager implements IImageManager {
 
     private CircleImageLoader mCircleImageLoader;
 
+    private int CACHE_MAX_SIZE = 10 * 1024 * 1024;
+
     @Inject
     private Application context;
 
@@ -63,7 +65,7 @@ public class ImageManager implements IImageManager {
     }
 
     public int getImageCacheSize() {
-        return localBitmapCache.size/1024;
+        return localBitmapCache.size / 1024;
     }
 
     /**
@@ -114,7 +116,7 @@ public class ImageManager implements IImageManager {
     /**
      * 本地图片缓存
      */
-    LruMemoryCache localBitmapCache = new LruMemoryCache();
+    LruMemoryCache localBitmapCache = new LruMemoryCache(CACHE_MAX_SIZE);
 
     /**
      * 获取本地图片
