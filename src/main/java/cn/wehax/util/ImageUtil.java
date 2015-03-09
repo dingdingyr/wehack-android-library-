@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
@@ -28,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import cn.wehax.common.R;
+import roboguice.util.Ln;
 
 /**
  * Created by howe on 14/12/18.
@@ -97,15 +99,18 @@ public class ImageUtil {
         try {
 
             byte[] array = getImageByteArrayFromUri(activity,uri);
-
+            Ln.e("PHOTO 2.Albums array="+array);
             if (array == null) {
                 return null;
             }
             bitmap = convertBitmapFromByteArray(array, 480, 800);
 
+            Ln.e("PHOTO 2.Albums bitmap="+bitmap);
+
             saveImage(bitmap, imagePath);
         } catch (Exception e) {
             e.printStackTrace();
+            Ln.e("PHOTO Albums Exception="+e.toString());
         }
 
         return bitmap;
@@ -249,6 +254,7 @@ public class ImageUtil {
      */
     public static Bitmap doImageFromCamera(Intent data, String imagePath) {
         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+        Ln.e("PHOTO 1.photo    uri=" + data.getData() + " path=" + imagePath);
         saveImage(bitmap, imagePath);
         return bitmap;
     }
@@ -264,9 +270,10 @@ public class ImageUtil {
 
             out = new FileOutputStream(file, false);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 70, out);
-
+            Ln.e("PHOTO save success:"+imagePath);
         } catch (Exception e) {
             e.printStackTrace();
+            Ln.e("PHOTO saveImage   Execption=" +e.toString());
         } finally {
             try {
                 if (out != null) {
@@ -370,35 +377,32 @@ public class ImageUtil {
         return BitmapFactory.decodeFile(filePath, options);
     }
 
-    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
+    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap){
+        return getRoundedCornerBitmap(bitmap,10);
+    }
 
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
+    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap,int radius) {
+
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        //得到画布
         Canvas canvas = new Canvas(output);
-
+        //将画布的四角圆化
+        final int color = Color.RED;
         final Paint paint = new Paint();
-        //保证是方形，并且从中心画
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        int w;
-        int deltaX = 0;
-        int deltaY = 0;
-        if (width <= height) {
-            w = width;
-            deltaY = height - w;
-        } else {
-            w = height;
-            deltaX = width - w;
-        }
-        final Rect rect = new Rect(deltaX, deltaY, w, w);
+        //得到与图像相同大小的区域 由构造的四个值决定区域的位置以及大小
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
         final RectF rectF = new RectF(rect);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG));
+        }
+        //值越大角度越明显
+        final float roundPx = radius;
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
-        //圆形，所有只用一个
-
-        int radius = (int) (Math.sqrt(w * w * 2.0d) / 2);
-        canvas.drawRoundRect(rectF, radius, radius, paint);
-
+        paint.setColor(color);
+        //drawRoundRect的第2,3个参数一样则画的是正圆的一角，如果数值不同则是椭圆的一角
+        canvas.drawRoundRect(rectF, roundPx,roundPx, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
         return output;

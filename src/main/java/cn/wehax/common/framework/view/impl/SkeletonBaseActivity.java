@@ -44,6 +44,7 @@ public abstract class SkeletonBaseActivity extends RoboFragmentActivity implemen
             mDialog.setCanceledOnTouchOutside(false);
             mDialog.setCancelable(false);
         } else {
+            mDialog.setMessage(msg);
             mDialog.show();
         }
 

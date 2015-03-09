@@ -23,6 +23,12 @@ public interface IImageManager {
     public ImageLoader getCircleImageLoader();
 
     /**
+     * 获取圆角loader
+     * @return
+     */
+    public ImageLoader getCircleCornerImageLoader(int radius);
+
+    /**
      * 获取本地图片
      * 1.先读缓存
      * 2.读本地图片（根据指定的图片长宽最大值，将图片缩放至合理大小，并缓存图片）

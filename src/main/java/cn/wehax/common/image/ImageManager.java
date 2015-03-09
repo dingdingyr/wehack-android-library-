@@ -27,6 +27,10 @@ public class ImageManager implements IImageManager {
 
     private CircleImageLoader mCircleImageLoader;
 
+    private int CACHE_MAX_SIZE = 10 * 1024 * 1024;
+
+    private CircleCornerImageLoader mCircleCornerImageLoader;
+
     @Inject
     private Application context;
 
@@ -63,7 +67,7 @@ public class ImageManager implements IImageManager {
     }
 
     public int getImageCacheSize() {
-        return localBitmapCache.size/1024;
+        return localBitmapCache.size / 1024;
     }
 
     /**
@@ -114,7 +118,7 @@ public class ImageManager implements IImageManager {
     /**
      * 本地图片缓存
      */
-    LruMemoryCache localBitmapCache = new LruMemoryCache();
+    LruMemoryCache localBitmapCache = new LruMemoryCache(CACHE_MAX_SIZE);
 
     /**
      * 获取本地图片
@@ -252,4 +256,13 @@ public class ImageManager implements IImageManager {
         return BitmapFactory.decodeFile(path);
     }
 
+    @Override
+    public ImageLoader getCircleCornerImageLoader(int radius) {
+        if (mCircleCornerImageLoader == null) {
+            ImageLoader.ImageCache imageCache = localBitmapCache;
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
+            mCircleCornerImageLoader = new CircleCornerImageLoader(requestQueue, imageCache,radius);
+        }
+        return mCircleCornerImageLoader;
+    }
 }
