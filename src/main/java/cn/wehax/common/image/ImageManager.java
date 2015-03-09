@@ -27,6 +27,8 @@ public class ImageManager implements IImageManager {
 
     private CircleImageLoader mCircleImageLoader;
 
+    private CircleCornerImageLoader mCircleCornerImageLoader;
+
     @Inject
     private Application context;
 
@@ -252,4 +254,13 @@ public class ImageManager implements IImageManager {
         return BitmapFactory.decodeFile(path);
     }
 
+    @Override
+    public ImageLoader getCircleCornerImageLoader(int radius) {
+        if (mCircleCornerImageLoader == null) {
+            ImageLoader.ImageCache imageCache = localBitmapCache;
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
+            mCircleCornerImageLoader = new CircleCornerImageLoader(requestQueue, imageCache,radius);
+        }
+        return mCircleCornerImageLoader;
+    }
 }
