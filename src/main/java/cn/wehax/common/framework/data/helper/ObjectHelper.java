@@ -20,6 +20,7 @@ import cn.wehax.common.framework.data.annotations.ObjectFrom;
 import cn.wehax.common.framework.data.annotations.ValueFrom;
 import cn.wehax.common.framework.model.IBaseBean;
 import cn.wehax.common.framework.model.IDataBean;
+import roboguice.util.Ln;
 
 /**
  * Created by Terry on 15/1/4.
@@ -317,6 +318,9 @@ public class ObjectHelper {
             dao.createOrUpdate(data);
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
+        } catch (Exception e){
+            Ln.e("ERROR : 数据库已关闭:"+e.toString());
             return false;
         }
         List<Field> toBeCreateField = ObjectHelper.findFieldListWithAnnotation(data.getClass(), ObjectFrom.class);
