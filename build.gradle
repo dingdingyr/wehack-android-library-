@@ -38,6 +38,7 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.8'
     compile 'com.j256.ormlite:ormlite-android:4.46'
     compile files('lib/umeng-analytics-v5.4.1.jar')
+    compile files('lib/picasso-2.1.1.jar')
 
     //    compile 'com.android.support:appcompat-v7:21.0.0'
 }

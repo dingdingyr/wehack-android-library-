@@ -18,6 +18,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -27,6 +28,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import cn.wehax.common.R;
 import roboguice.util.Ln;
@@ -53,37 +56,32 @@ public class ImageUtil {
         return "img_" + index + ".png";
     }
 
-    public static void chooseImage(Activity activity, int requestCode) {
-        chooseImage(activity, requestCode, false);
+    /**
+     * 用当前时间给取得的图片命名
+     *
+     */
+    public static String getImageNameWithTime() {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmsss");
+        return dateFormat.format(date) + ".jpg";
     }
 
-    public static void chooseImage(Activity activity, int requestCode, boolean isModifyImage) {
-        Intent pickIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        pickIntent.setType("image/*");
-        if (isModifyImage) {
-            initModifyImageConfig(pickIntent);
+
+    public static void moveToImageCrop(Activity activity,Uri uri,int requestCode){
+        Intent intent;
+        intent = new Intent("com.android.camera.action.CROP");// 打开图片裁减工具
+        if (uri != null) {
+            intent.setDataAndType(uri, "image/*");
+            intent.putExtra("crop", "true");
+            intent.putExtra("aspectX", 1);
+            intent.putExtra("aspectY", 1);
+            intent.putExtra("outputX", 200);
+            intent.putExtra("outputY", 200);
+            intent.putExtra("return-data", true);
         }
-
-
-        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (isModifyImage) {
-            initModifyImageConfig(takePhotoIntent);
-        }
-
-        Intent chooserIntent = Intent.createChooser(
-                pickIntent, activity.getString(R.string.title_choose_photo_source));
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePhotoIntent});
-        activity.startActivityForResult(chooserIntent, requestCode);
+        activity.startActivityForResult(intent, requestCode);
     }
 
-    private static void initModifyImageConfig(final Intent intent) {
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 200);
-        intent.putExtra("outputY", 200);
-        intent.putExtra("return-data", true);
-    }
 
     /**
      * 处理从相册获取的图片
@@ -242,7 +240,7 @@ public class ImageUtil {
 
         ContentResolver resolver = activity.getContentResolver();
 
-        return readByteArryFromStream(resolver.openInputStream(Uri.parse(uri.toString())));
+        return readByteArryFromStream(resolver.openInputStream(uri));
     }
 
 
@@ -259,7 +257,7 @@ public class ImageUtil {
         return bitmap;
     }
 
-    public static void saveImage(Bitmap bitmap, String imagePath) {
+    public static boolean saveImage(Bitmap bitmap, String imagePath) {
         FileOutputStream out = null;
 
         try {
@@ -271,9 +269,11 @@ public class ImageUtil {
             out = new FileOutputStream(file, false);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 70, out);
             Ln.e("PHOTO save success:"+imagePath);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             Ln.e("PHOTO saveImage   Execption=" +e.toString());
+            return false;
         } finally {
             try {
                 if (out != null) {
