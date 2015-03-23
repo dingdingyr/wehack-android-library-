@@ -16,6 +16,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -103,7 +104,36 @@ public class ImageUtil {
             }
             bitmap = convertBitmapFromByteArray(array, 480, 800);
 
+            int digree = 0;
             Ln.e("PHOTO 2.Albums bitmap="+bitmap);
+            try {
+
+                ExifInterface exif = new ExifInterface(uri.getPath());
+                int ori = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED);
+
+                switch (ori){
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        digree = 90;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        digree = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        digree = 270;
+                        break;
+                    default:
+                        digree = 0;
+                        break;
+                }
+            }catch (Exception e){
+
+            }
+            if(digree!=0){
+                Matrix m = new Matrix();
+                m.postRotate(digree);
+                bitmap = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),m,true);
+            }
 
             saveImage(bitmap, imagePath);
         } catch (Exception e) {

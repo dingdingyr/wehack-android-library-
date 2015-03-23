@@ -36,13 +36,15 @@ public class SkeletonBaseFragment extends RoboFragment implements IBaseView {
             mDialog.setCanceledOnTouchOutside(false);
             mDialog.setCancelable(false);
         } else {
+            mDialog.setMessage(msg);
             mDialog.show();
         }
     }
 
     @Override
     public void showWaitingDialog(int idRes) {
-
+        if(isActivityAlive())
+            showWaitingDialog(getActivity().getString(idRes));
     }
 
     @Override
