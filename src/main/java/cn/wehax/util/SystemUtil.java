@@ -5,17 +5,57 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * 提供与Android系统有关的辅助方法
  */
 public class SystemUtil {
+
+    /**
+     * 如果指定App已安装返回true，否则返回false
+     *
+     * @param context
+     * @param packageName App的包名（每一个App拥有唯一的包名）
+     * @return
+     */
+    public static boolean isAppInstalled(Context context, String packageName) {
+        boolean isValid = false;
+
+        // 获得PackageManager对象
+        PackageManager pm = context.getPackageManager();
+
+        // 设置查询Intent，之后将作为查询条件
+        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        // 通过查询，获得所有ResolveInfo对象.
+        List<ResolveInfo> resolveInfos =
+                pm.queryIntentActivities(mainIntent, PackageManager.GET_INTENT_FILTERS);
+
+        // 调用系统排序 ：根据Activity的name进行排序
+        // 该排序很重要，否则只能显示系统应用，而不能列出第三方应用程序
+        Collections.sort(resolveInfos, new ResolveInfo.DisplayNameComparator(pm));
+
+        // 遍历整个手机中的应用程序，将找到的MT版本添加到数据成员中
+        for (ResolveInfo reInfo : resolveInfos) {
+            String pkgName = reInfo.activityInfo.packageName;
+            if (pkgName.equals(packageName)) {
+                isValid = true;
+                break;
+            }
+        }
+        return isValid;
+    }
 
     /**
      * 检测一个android程序是否在运行

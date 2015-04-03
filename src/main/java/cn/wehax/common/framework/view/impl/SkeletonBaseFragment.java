@@ -41,6 +41,7 @@ public class SkeletonBaseFragment extends RoboFragment implements IBaseView {
         }
     }
 
+
     @Override
     public void showWaitingDialog(int idRes) {
         if(isActivityAlive())
@@ -52,7 +53,6 @@ public class SkeletonBaseFragment extends RoboFragment implements IBaseView {
         if (mDialog != null && mDialog.isShowing()) {
             mDialog.dismiss();
         }
-
     }
 
     @Override
