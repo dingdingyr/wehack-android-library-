@@ -34,8 +34,8 @@ import android.content.SharedPreferences;
  * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-3-6
  */
 public class PreferencesUtils {
-
-	private static String preferenceName = "paime_preference";
+    public static final String DEFAULT_PREFERENCE_NAME = "paime_preference";
+	private static String preferenceName = DEFAULT_PREFERENCE_NAME;
 
 	public static void setPreferenceName(String name) {
 		preferenceName = name;
