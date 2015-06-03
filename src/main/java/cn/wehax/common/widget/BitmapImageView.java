@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import cn.wehax.util.StringUtil;
+import cn.wehax.util.StringUtils;
 import roboguice.util.Ln;
 
 
@@ -30,7 +30,7 @@ public class BitmapImageView extends ImageView {
 
     public void setImagePath(String path) {
         release();
-        if (StringUtil.isNotEmpty(path)) {
+        if (StringUtils.isNotEmpty(path)) {
             try {
                 mBitmap = BitmapFactory.decodeFile(path);
                 if (mBitmap != null && !mBitmap.isRecycled()) {
@@ -48,7 +48,7 @@ public class BitmapImageView extends ImageView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (StringUtil.isNotEmpty(mPath)) {
+        if (StringUtils.isNotEmpty(mPath)) {
             setImagePath(mPath);
         }
     }

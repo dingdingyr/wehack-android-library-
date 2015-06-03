@@ -16,7 +16,7 @@ import com.google.inject.Singleton;
 import java.io.File;
 
 import cn.wehax.util.ImageUtil;
-import cn.wehax.util.StringUtil;
+import cn.wehax.util.StringUtils;
 
 /**
  * Created by dss on 2014/12/13
@@ -246,7 +246,7 @@ public class ImageManager implements IImageManager {
      * @return
      */
     private Bitmap readLocalBitmap(String path) {
-        if (StringUtil.isNullOrEmpty(path))
+        if (StringUtils.isNullOrEmpty(path))
             return null;
 
         if (!new File(path).exists()) {

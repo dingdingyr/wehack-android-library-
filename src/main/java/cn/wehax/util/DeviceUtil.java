@@ -122,7 +122,7 @@ public class DeviceUtil {
      * 获得设备的固件版本号
      */
     public static String getReleaseVersion() {
-        return StringUtil.makeSafe(Build.VERSION.RELEASE);
+        return StringUtils.makeSafe(Build.VERSION.RELEASE);
     }
 
     /**
@@ -170,14 +170,14 @@ public class DeviceUtil {
      * @return
      */
     public static String getDeviceModel() {
-        return StringUtil.trim(Build.MODEL);
+        return StringUtils.trim(Build.MODEL);
     }
 
     /**
      * 获取厂商信息
      */
     public static String getManufacturer() {
-        return StringUtil.trim(Build.MANUFACTURER);
+        return StringUtils.trim(Build.MANUFACTURER);
     }
 
     /**

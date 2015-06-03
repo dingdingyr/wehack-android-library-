@@ -3,7 +3,7 @@ package cn.wehax.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StringUtil {
+public class StringUtils {
 
     private static final String PATTERN_ALPHABETIC_OR_NUMBERIC = "[A-Za-z0-9]*";
     private static final String PATTERN_NUMBERIC = "\\d*\\.{0,1}\\d*";
@@ -187,7 +187,7 @@ public class StringUtil {
          * @param phoneNumber
          */
         public static boolean isLegalPhoneNumber(String phoneNumber){
-            if(StringUtil.isNullOrEmpty(phoneNumber)){
+            if(StringUtils.isNullOrEmpty(phoneNumber)){
                 return false;
             }
 

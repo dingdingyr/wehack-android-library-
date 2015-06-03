@@ -6,7 +6,6 @@ import android.widget.ImageView;
 
 import org.apache.http.util.EncodingUtils;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -106,7 +105,7 @@ public class ResourceUtils {
      */
     public static void loadImageFromAsserts(final Context ctx, ImageView view, String fileName) {
         try {
-            if (ctx != null && !StringUtil.isNullOrEmpty(fileName)) {
+            if (ctx != null && !StringUtils.isNullOrEmpty(fileName)) {
                 InputStream is = ctx.getResources().getAssets().open(fileName);
                 view.setImageDrawable(Drawable.createFromStream(is, null));
             }

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.TypedValue;
 
-import cn.wehax.util.StringUtil;
-
 public class ConvertToUtils {
 
 	private static final String EMPTY_STRING = "";
@@ -16,7 +14,7 @@ public class ConvertToUtils {
 	 * @return
 	 */
 	public static String toString(String str) {
-		if (StringUtil.isNullOrEmpty(str)) {
+		if (StringUtils.isNullOrEmpty(str)) {
 			return EMPTY_STRING;
 		} else {
 			return str;
@@ -29,7 +27,7 @@ public class ConvertToUtils {
 	 * @return
 	 */
 	public static String toString(Object o) {
-		if (StringUtil.isNullOrEmpty(o)) {
+		if (StringUtils.isNullOrEmpty(o)) {
 			return EMPTY_STRING;
 		} else {
 			return o.toString();
@@ -54,7 +52,7 @@ public class ConvertToUtils {
 	 * @return
 	 */
 	public static int toInt(String str, int def) {
-		if (StringUtil.isNullOrEmpty(str)) {
+		if (StringUtils.isNullOrEmpty(str)) {
 			return def;
 		}
 		try {
@@ -82,7 +80,7 @@ public class ConvertToUtils {
 	 * @return
 	 */
 	public static boolean toBoolean(String str, boolean def) {
-		if (StringUtil.isNullOrEmpty(str)) {
+		if (StringUtils.isNullOrEmpty(str)) {
 			return def;
 		}
 		if ("false".equalsIgnoreCase(str) || "0".equals(str)) {
@@ -112,7 +110,7 @@ public class ConvertToUtils {
 	 * @return
 	 */
 	public static float toFloat(String str, float def) {
-		if (StringUtil.isNullOrEmpty(str)) {
+		if (StringUtils.isNullOrEmpty(str)) {
 			return def;
 		}
 		try {
@@ -140,7 +138,7 @@ public class ConvertToUtils {
 	 * @return
 	 */
 	public static long toLong(String str, long def) {
-		if (StringUtil.isNullOrEmpty(str)) {
+		if (StringUtils.isNullOrEmpty(str)) {
 			return def;
 		}
 		try {
@@ -168,7 +166,7 @@ public class ConvertToUtils {
 	 * @return
 	 */
 	public static short toShort(String str, short def) {
-		if (StringUtil.isNullOrEmpty(str)) {
+		if (StringUtils.isNullOrEmpty(str)) {
 			return def;
 		}
 		try {
@@ -180,7 +178,7 @@ public class ConvertToUtils {
 
 	/** 颜色转化 */
 	public static int toColor(String str, int def) {
-		if (StringUtil.isNullOrEmpty(str)) {
+		if (StringUtils.isNullOrEmpty(str)) {
 			return def;
 		}
 		try {
