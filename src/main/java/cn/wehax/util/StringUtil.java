@@ -1,5 +1,6 @@
 package cn.wehax.util;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringUtil {
@@ -162,5 +163,36 @@ public class StringUtil {
      */
     public static String trim(String str) {
         return str == null ? EMPTY : str.trim();
+    }
+
+    /**
+     * 字符串有效性检查
+     */
+    public static class ValidityCheck{
+        /**
+         * 手机号正则表达式
+         *
+         * <p>手机号规律如下</p>
+         * <ul>
+         *     <li>移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188</li>
+         *     <li>联通：130、131、132、152、155、156、185、186</li>
+         *     <li>联通：电信：133、153、180、189、（1349卫通）</li>
+         * </ul>
+         * <p>总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9</p>
+         */
+        private static Pattern mPhoneNumberPattern = Pattern.compile("1[3578]\\d{9}");
+
+        /**
+         * 判断指定字符串是否是合法手机号
+         * @param phoneNumber
+         */
+        public static boolean isLegalPhoneNumber(String phoneNumber){
+            if(StringUtil.isNullOrEmpty(phoneNumber)){
+                return false;
+            }
+
+            Matcher matcher = mPhoneNumberPattern.matcher(phoneNumber);
+            return matcher.matches();
+        }
     }
 }
