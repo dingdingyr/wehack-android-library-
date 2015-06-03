@@ -2,9 +2,6 @@ package cn.wehax.util;
 
 import java.util.regex.Pattern;
 
-/**
- * Created by dss on 2014/12/4
- */
 public class StringUtil {
 
     private static final String PATTERN_ALPHABETIC_OR_NUMBERIC = "[A-Za-z0-9]*";

@@ -35,5 +35,8 @@ public abstract class SingleFragmentContainerActivity extends RoboFragmentActivi
        return mFragment;
     }
 
+    /**
+     * 创建Activity包含的单个Fragment
+     */
     protected abstract Fragment onCreateFragment();
 }
