@@ -178,13 +178,15 @@ public class StringUtils {
          *     <li>联通：130、131、132、152、155、156、185、186</li>
          *     <li>联通：电信：133、153、180、189、（1349卫通）</li>
          * </ul>
-         * <p>总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9</p>
+         * <p>总结起来就是（1）手机号长11位（2）第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9</p>
          */
-        private static Pattern mPhoneNumberPattern = Pattern.compile("1[3578]\\d{9}");
+        private static Pattern mPhoneNumberPattern = Pattern.compile("1[358]\\d{9}");
 
         /**
          * 判断指定字符串是否是合法手机号
          * @param phoneNumber
+         *
+         * @return 如果手机号合法，返回true；否则，返回false
          */
         public static boolean isLegalPhoneNumber(String phoneNumber){
             if(StringUtils.isNullOrEmpty(phoneNumber)){

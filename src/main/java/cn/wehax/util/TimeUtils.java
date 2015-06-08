@@ -1,4 +1,4 @@
-package cn.wehax.util.time;
+package cn.wehax.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -180,4 +180,15 @@ public class TimeUtils {
 
         return Week;
     }
+
+    public interface IDateFormatStrategy {
+        /**
+         * 格式化日期
+         *
+         * @param millisecond 日期对应
+         * @return
+         */
+        String formatDate(long millisecond);
+    }
+
 }
