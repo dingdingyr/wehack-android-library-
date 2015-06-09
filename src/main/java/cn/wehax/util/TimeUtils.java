@@ -15,15 +15,15 @@ public class TimeUtils {
     /**
      * 1h=3600s
      */
-    private final static int SECOND_IN_HOUR = 3600;
+    public final static int SECOND_IN_HOUR = 3600;
     /**
      * 1m=60s
      */
-    private final static int SECOND_IN_MINUTE = 60;
+    public final static int SECOND_IN_MINUTE = 60;
     /**
      * 1h=60m
      */
-    private final static int MINUTE_IN_HOUR = 60;
+    public final static int MINUTE_IN_HOUR = 60;
 
     // 若干日期格式化样式
     public static final String PATTERN_Y_SLASH_M_SLASH_D_H_COMMA_M = "yyyy/MM/dd HH:mm";
@@ -72,35 +72,6 @@ public class TimeUtils {
 
         return (mm == 0 ? "" : (mm < 10 ? "0" + mm : mm) + ":")
                 + (ss == 0 ? "" : (ss < 10 ? "0" + ss : ss) + "'");
-    }
-
-    /**
-     * 格式化倒计时时间（时间格式：hh:mm:ss'）
-     *
-     * @param milliseconds 倒计时时间（单位毫秒）
-     * @return
-     */
-    public static String getFormatCountDownTime(long milliseconds) {
-        if (milliseconds < 0) {
-            milliseconds = 0;
-        }
-
-        long seconds = milliseconds / 1000;
-        long hh = seconds / SECOND_IN_HOUR;
-        long mm = seconds % SECOND_IN_HOUR;
-        long ss = mm % SECOND_IN_MINUTE;
-        mm = mm / SECOND_IN_MINUTE;
-
-        String time;
-        if (hh > 0) {
-            time = String.format("%02d:%02d:%02d", hh, mm, ss);
-        } else if (mm > 0) {
-            time = String.format("%02d:%02d", mm, ss);
-        } else {
-            time = String.format("%02d", ss);
-        }
-
-        return time;
     }
 
     /**
@@ -185,7 +156,7 @@ public class TimeUtils {
         /**
          * 格式化日期
          *
-         * @param millisecond 日期对应
+         * @param millisecond 日期
          * @return
          */
         String formatDate(long millisecond);

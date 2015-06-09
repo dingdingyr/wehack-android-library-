@@ -19,7 +19,7 @@ import java.util.List;
  * mail: zhichangterry@gmail.com
  * QQ: 1090035354
  */
-public class NetworkUtil {
+public class NetworkUtils {
 
     private static String NONE = "none";
     public static boolean isWifiAvailable(Context ctx) {
