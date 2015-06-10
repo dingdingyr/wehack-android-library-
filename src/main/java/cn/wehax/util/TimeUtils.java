@@ -25,6 +25,11 @@ public class TimeUtils {
      */
     public final static int MINUTE_IN_HOUR = 60;
 
+    /**
+     * 1s=1000ms
+     */
+    public final static int MILLIS_IN_SECOND = 1000;
+
     // 若干日期格式化样式
     public static final String PATTERN_Y_SLASH_M_SLASH_D_H_COMMA_M = "yyyy/MM/dd HH:mm";
     public static final String PATTERN_Y_SLASH_M_SLASH_D = "yyyy/MM/dd";
@@ -152,7 +157,7 @@ public class TimeUtils {
         return Week;
     }
 
-    public interface IDateFormatStrategy {
+    public static interface IDateFormatStrategy {
         /**
          * 格式化日期
          *
@@ -160,6 +165,19 @@ public class TimeUtils {
          * @return
          */
         String formatDate(long millisecond);
+    }
+
+    /**
+     * 时间格式化策略
+     */
+    public static interface ITimeFormatStrategy {
+        /**
+         * 格式化日期
+         *
+         * @param millisecond 时间
+         * @return
+         */
+        String formatTime(long millisecond);
     }
 
 }
