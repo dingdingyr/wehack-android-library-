@@ -180,7 +180,7 @@ public class StringUtils {
          * </ul>
          * <p>总结起来就是（1）手机号长11位（2）第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9</p>
          */
-        private static Pattern mPhoneNumberPattern = Pattern.compile("1[358]\\d{9}");
+        private static Pattern mPhoneNumberPattern = Pattern.compile("1[34578]\\d{9}");
 
         /**
          * 判断指定字符串是否是合法手机号
